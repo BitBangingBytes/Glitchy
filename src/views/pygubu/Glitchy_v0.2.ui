@@ -1,0 +1,2084 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.3">
+  <object class="tk.Toplevel" id="toplevel1">
+    <property name="height">885</property>
+    <property name="resizable">vertically</property>
+    <property name="title" translatable="yes">Glitchy</property>
+    <property name="width">750</property>
+    <containerlayout manager="grid">
+      <property name="anchor">center</property>
+    </containerlayout>
+    <child>
+      <object class="ttk.Frame" id="Setup">
+        <layout manager="place">
+          <property name="height">885</property>
+          <property name="width">750</property>
+        </layout>
+        <child>
+          <object class="ttk.Notebook" id="n_NotebookTop">
+            <property name="height">245</property>
+            <property name="width">820</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="height">885</property>
+              <property name="width">750</property>
+              <property name="x">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_Glitch_Auto">
+                <property name="text" translatable="yes">Automated Glitch</property>
+                <child>
+                  <object class="ttk.Frame" id="f_GlitchSettings">
+                    <property name="padding">10</property>
+                    <layout manager="pack">
+                      <property name="side">top</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Label" id="l_GlitchSettingsBackgroundImage">
+                        <property name="image">Glitchy v021_resized_scaled.png</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">841</property>
+                          <property name="relheight">0.0</property>
+                          <property name="relwidth">0.0</property>
+                          <property name="width">726</property>
+                          <property name="x">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchTimeStart">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchtime_startvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">10</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">340</property>
+                          <property name="y">306</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchTimeStop">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchtime_stopvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">10</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">580</property>
+                          <property name="y">304</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchStrengthStart">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchstrength_startvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">6</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">70</property>
+                          <property name="y">267</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchStrengthStop">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchstrength_stopvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">6</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">170</property>
+                          <property name="y">266</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchTimeStepSize">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchtime_stepvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">6</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">465</property>
+                          <property name="y">330</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="Run">
+                        <property name="command" type="command" cbtype="simple">glitch_run</property>
+                        <property name="state">disabled</property>
+                        <property name="text" translatable="yes">Run</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">60</property>
+                          <property name="x">480</property>
+                          <property name="y">242</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchStrengthStepSize">
+                        <property name="justify">center</property>
+                        <property name="textvariable">string:glitchstrength_stepvalue</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                        <property name="width">5</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">120</property>
+                          <property name="y">327</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="Pause">
+                        <property name="command" type="command" cbtype="simple">glitch_pause</property>
+                        <property name="state">disabled</property>
+                        <property name="text" translatable="yes">Pause</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">60</property>
+                          <property name="x">550</property>
+                          <property name="y">242</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="Stop">
+                        <property name="command" type="command" cbtype="simple">glitch_stop</property>
+                        <property name="state">disabled</property>
+                        <property name="text" translatable="yes">Stop</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">60</property>
+                          <property name="x">620</property>
+                          <property name="y">242</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchCurrentValue">
+                        <property name="justify">center</property>
+                        <property name="state">readonly</property>
+                        <property name="text" translatable="yes">---------</property>
+                        <property name="textvariable">string:glitchtime_currentvalue</property>
+                        <property name="width">10</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">500</property>
+                          <property name="y">380</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="e_GlitchStrengthCurrentValue">
+                        <property name="justify">center</property>
+                        <property name="state">readonly</property>
+                        <property name="text" translatable="yes">---------</property>
+                        <property name="textvariable">string:glitchstrength_currentvalue</property>
+                        <property name="width">5</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">270</property>
+                          <property name="y">320</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="Load">
+                        <property name="command" type="command" cbtype="simple">open_file</property>
+                        <property name="text" translatable="yes">Load</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">80</property>
+                          <property name="x">65</property>
+                          <property name="y">50</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="Save">
+                        <property name="command" type="command" cbtype="simple">save_file</property>
+                        <property name="text" translatable="yes">Save</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">80</property>
+                          <property name="x">150</property>
+                          <property name="y">50</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="l_videohelp_automatedglitch">
+                        <property name="cursor">hand2</property>
+                        <property name="foreground">blue</property>
+                        <property name="text" translatable="yes">Video Help</property>
+                        <bind sequence="&lt;Button-1&gt;" handler="videohelp_automatedglitch" add="True" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">640</property>
+                          <property name="y">10</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Progressbar" id="progressbar2">
+                        <property name="mode">determinate</property>
+                        <property name="orient">horizontal</property>
+                        <property name="variable">double:progressbar_strength</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">8</property>
+                          <property name="width">147</property>
+                          <property name="x">69</property>
+                          <property name="y">352</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Progressbar" id="progressbar3">
+                        <property name="mode">determinate</property>
+                        <property name="orient">horizontal</property>
+                        <property name="variable">double:progressbar_time</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">8</property>
+                          <property name="width">245</property>
+                          <property name="x">375</property>
+                          <property name="y">354</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="tk.Canvas" id="c_device_under_test">
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">122</property>
+                          <property name="width">130</property>
+                          <property name="x">511</property>
+                          <property name="y">482</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_event_1">
+                        <property name="state">readonly</property>
+                        <property name="values">"" "Power" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="pre_event1_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">100</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_event_2">
+                        <property name="state">disabled</property>
+                        <property name="values">"" "Power" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="pre_event2_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">130</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_event_3">
+                        <property name="state">disabled</property>
+                        <property name="values">"" "Power" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="pre_event3_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">160</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Progressbar" id="progressbar1">
+                        <property name="mode">determinate</property>
+                        <property name="orient">horizontal</property>
+                        <property name="variable">double:progressbar_overall</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">8</property>
+                          <property name="width">275</property>
+                          <property name="x">366</property>
+                          <property name="y">619</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_option_1">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">100</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_option_2">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">130</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="pre_option_3">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">160</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="pre_delay_1">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_pre_delay_1</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">100</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="pre_delay_2">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_pre_delay_2</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">130</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="pre_delay_3">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_pre_delay_3</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">160</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_event_1">
+                        <property name="state">readonly</property>
+                        <property name="values">"" "Debugger" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="post_event1_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">710</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_event_2">
+                        <property name="state">disabled</property>
+                        <property name="values">"" "Debugger" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="post_event2_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">740</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_event_3">
+                        <property name="state">disabled</property>
+                        <property name="values">"" "Debugger" "I/O" "Serial"</property>
+                        <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="post_event3_trigger" add="" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">100</property>
+                          <property name="x">329</property>
+                          <property name="y">770</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_option_1">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">710</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_option_2">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">740</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Combobox" id="post_option_3">
+                        <property name="state">disabled</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">157</property>
+                          <property name="x">445</property>
+                          <property name="y">770</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="post_delay_1">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_post_delay_1</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">710</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="post_delay_2">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_post_delay_2</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">740</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="post_delay_3">
+                        <property name="justify">center</property>
+                        <property name="state">disabled</property>
+                        <property name="textvariable">string:v_post_delay_3</property>
+                        <property name="validate">key</property>
+                        <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                        <property name="width">8</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">615</property>
+                          <property name="y">770</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="tk.Text" id="text_log">
+                        <property name="height">10</property>
+                        <property name="text" translatable="yes">Logging not implemented
+yet...</property>
+                        <property name="width">50</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">370</property>
+                          <property name="width">225</property>
+                          <property name="x">35</property>
+                          <property name="y">437</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label7">
+                        <property name="anchor">e</property>
+                        <property name="text" translatable="yes">---------</property>
+                        <property name="textvariable">string:glitchcounter_triggered</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">37</property>
+                          <property name="x">425</property>
+                          <property name="y">510</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label8">
+                        <property name="anchor">e</property>
+                        <property name="text" translatable="yes">---------</property>
+                        <property name="textvariable">string:glitchcounter_missed</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="width">37</property>
+                          <property name="x">425</property>
+                          <property name="y">530</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_Chipwhisperer_Settings">
+                <property name="text" translatable="yes">ChipWhisperer</property>
+                <child>
+                  <object class="ttk.Frame" id="frame3">
+                    <property name="height">200</property>
+                    <property name="padding">10</property>
+                    <property name="width">820</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Label" id="l_videohelp_chipwhisperer">
+                        <property name="cursor">hand2</property>
+                        <property name="foreground">blue</property>
+                        <property name="text" translatable="yes">Video Help</property>
+                        <bind sequence="&lt;Button-1&gt;" handler="videohelp_chipwhisperer" add="True" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">650</property>
+                          <property name="y">240</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="l_cw_singleglitch">
+                        <property name="height">215</property>
+                        <property name="text" translatable="yes">Single Glitch</property>
+                        <property name="width">300</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_timeaftertrigger">
+                            <property name="text" translatable="yes">Time after
+Trigger</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">25</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_cw_cyclesaftertrigger">
+                            <property name="justify">center</property>
+                            <property name="textvariable">string:v_cw_cyclesaftertrigger</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <property name="width">11</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">30</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label15">
+                            <property name="text" translatable="yes">Cycles</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">140</property>
+                              <property name="y">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label16">
+                            <property name="text" translatable="yes">Time</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">230</property>
+                              <property name="y">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_triggertime">
+                            <property name="text" translatable="yes">-------</property>
+                            <property name="textvariable">string:v_cw_trigger_calctime</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">230</property>
+                              <property name="y">30</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_glitchwidth">
+                            <property name="text" translatable="yes">Glitch Width</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_cw_glitchcycles">
+                            <property name="justify">center</property>
+                            <property name="textvariable">string:v_cw_glitchcycles</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <property name="width">11</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_glitchtime">
+                            <property name="text" translatable="yes">-------</property>
+                            <property name="textvariable">string:v_cw_glitch_calctime</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">230</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="b_cw_glitch">
+                            <property name="command" type="command" cbtype="simple">cw_glitch</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Glitch</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">150</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_glitchstatus">
+                            <property name="text" translatable="yes">-------</property>
+                            <property name="textvariable">string:v_cw_glitchstatus</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">130</property>
+                              <property name="y">155</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_glitchtimeout">
+                            <property name="text" translatable="yes">Glitch
+Timeout</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">105</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_cw_glitchtimeout">
+                            <property name="justify">center</property>
+                            <property name="textvariable">string:v_cw_glitchtimeout</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                            <property name="width">8</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">110</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label1">
+                            <property name="text" translatable="yes">Seconds</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">195</property>
+                              <property name="y">111</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Separator" id="separator2">
+                            <property name="orient">horizontal</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">250</property>
+                              <property name="x">25</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="l_cw_settings">
+                        <property name="height">215</property>
+                        <property name="text" translatable="yes">Settings</property>
+                        <property name="width">418</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">310</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_clock">
+                            <property name="text" translatable="yes">Clock</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">20</property>
+                              <property name="y">30</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_cw_speed">
+                            <property name="justify">center</property>
+                            <property name="textvariable">string:v_cw_speed</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                            <property name="width">8</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">90</property>
+                              <property name="y">30</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_speed">
+                            <property name="text" translatable="yes">Speed (MHz)</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">83</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_cw_source">
+                            <property name="text" translatable="yes">Source</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">220</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Combobox" id="c_cw_source">
+                            <property name="state">readonly</property>
+                            <property name="textvariable">string:v_cw_source</property>
+                            <property name="values">Internal External</property>
+                            <property name="width">12</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">200</property>
+                              <property name="y">30</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Separator" id="separator1">
+                            <property name="orient">horizontal</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">300</property>
+                              <property name="x">20</property>
+                              <property name="y">65</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="c_cw_configure">
+                            <property name="command" type="command" cbtype="simple">cw_configure</property>
+                            <property name="text" translatable="yes">Configure</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">150</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="b_cw_io">
+                            <property name="command" type="command" cbtype="simple">cw_io</property>
+                            <property name="state">disabled</property>
+                            <property name="text" translatable="yes">I/O 3</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">300</property>
+                              <property name="y">150</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label3">
+                            <property name="text" translatable="yes">Glitch MOSFET</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">20</property>
+                              <property name="y">80</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Combobox" id="c_cw_mosfet">
+                            <property name="state">readonly</property>
+                            <property name="textvariable">string:v_cw_mosfet</property>
+                            <property name="values">"High Power" "Low Power" "Both"</property>
+                            <property name="width">12</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">150</property>
+                              <property name="y">80</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_PowerSupply">
+                <property name="text" translatable="yes">Power Supply</property>
+                <child>
+                  <object class="ttk.Frame" id="f_PowerSupply">
+                    <property name="height">200</property>
+                    <property name="padding">10</property>
+                    <property name="width">820</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Labelframe" id="f_EnvoxBB3">
+                        <property name="text" translatable="yes">Envox BB3</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">220</property>
+                          <property name="width">725</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Labelframe" id="l_StartingPower">
+                            <property name="height">200</property>
+                            <property name="text" translatable="yes">Power Settings</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">120</property>
+                              <property name="width">200</property>
+                              <property name="x">250</property>
+                              <property name="y">25</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="l_StartingVoltage">
+                                <property name="text" translatable="yes">Voltage</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">10</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_StartingCurrent">
+                                <property name="text" translatable="yes">Current</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">10</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_startingvoltage1">
+                                <property name="textvariable">string:v_powersupply_startingvoltage1</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_startingvoltage2">
+                                <property name="textvariable">string:v_powersupply_startingvoltage2</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_startingcurrent1">
+                                <property name="textvariable">string:v_powersupply_startingcurrent1</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_startingcurrent2">
+                                <property name="textvariable">string:v_powersupply_startingcurrent2</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_startingchannel1">
+                                <property name="text" translatable="yes">CH 1</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">70</property>
+                                  <property name="y">10</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_startingchannel2">
+                                <property name="text" translatable="yes">CH 2</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">130</property>
+                                  <property name="y">10</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Checkbutton" id="l_powersupply_ch1_enable">
+                                <property name="variable">boolean:v_powersupply_ch1_enable</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">105</property>
+                                  <property name="y">9</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Checkbutton" id="l_powersupply_ch2_enable">
+                                <property name="variable">boolean:v_powersupply_ch2_enable</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">165</property>
+                                  <property name="y">9</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Labelframe" id="l_EndingPower">
+                            <property name="height">100</property>
+                            <property name="text" translatable="yes">Measured Values</property>
+                            <property name="width">200</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">120</property>
+                              <property name="width">200</property>
+                              <property name="x">460</property>
+                              <property name="y">25</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="l_EndingVoltage">
+                                <property name="text" translatable="yes">Voltage</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">10</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_EndingCurrent">
+                                <property name="text" translatable="yes">Current</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">10</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_measuredvoltage1">
+                                <property name="state">readonly</property>
+                                <property name="textvariable">string:v_powersupply_measuredvoltage1</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_measuredvoltage2">
+                                <property name="state">readonly</property>
+                                <property name="textvariable">string:v_powersupply_measuredvoltage2</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_measuredcurrent1">
+                                <property name="state">readonly</property>
+                                <property name="textvariable">string:v_powersupply_measuredcurrent1</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_measuredcurrent2">
+                                <property name="state">readonly</property>
+                                <property name="textvariable">string:v_powersupply_measuredcurrent2</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_endingchannel1">
+                                <property name="text" translatable="yes">CH 1</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">80</property>
+                                  <property name="y">10</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_endingchannel2">
+                                <property name="text" translatable="yes">CH 2</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">140</property>
+                                  <property name="y">10</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Labelframe" id="l_NetworkSettings">
+                            <property name="height">200</property>
+                            <property name="text" translatable="yes">Network Settings</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">120</property>
+                              <property name="width">230</property>
+                              <property name="x">10</property>
+                              <property name="y">25</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_ipaddr">
+                                <property name="text" translatable="yes">IP Address</property>
+                                <layout manager="place">
+                                  <property name="x">10</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="l_powersupply_port">
+                                <property name="text" translatable="yes">Port</property>
+                                <layout manager="place">
+                                  <property name="x">10</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_ipaddr">
+                                <property name="textvariable">string:v_powersupply_ipaddr</property>
+                                <layout manager="place">
+                                  <property name="width">120</property>
+                                  <property name="x">100</property>
+                                  <property name="y">30</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="e_powersupply_port">
+                                <property name="textvariable">string:v_powersupply_port</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                                <layout manager="place">
+                                  <property name="width">60</property>
+                                  <property name="x">100</property>
+                                  <property name="y">60</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_powersupply_connect">
+                            <property name="command" type="command" cbtype="simple">powersupply_connect</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Connect</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">20</property>
+                              <property name="y">160</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_powersupply_disconnect">
+                            <property name="command" type="command" cbtype="simple">powersupply_disconnect</property>
+                            <property name="state">disabled</property>
+                            <property name="style">RedButton.TButton</property>
+                            <property name="text" translatable="yes">Disconnect</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">160</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_powersupply_set">
+                            <property name="command" type="command" cbtype="simple">powersupply_set_button</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Set</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">60</property>
+                              <property name="x">260</property>
+                              <property name="y">160</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="l_videohelp_powersupply">
+                        <property name="cursor">hand2</property>
+                        <property name="foreground">blue</property>
+                        <property name="text" translatable="yes">Video Help</property>
+                        <bind sequence="&lt;Button-1&gt;" handler="videohelp_powersupply" add="True" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">650</property>
+                          <property name="y">240</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_SerialPort">
+                <property name="text" translatable="yes">Serial Port</property>
+                <child>
+                  <object class="ttk.Frame" id="f_SerialPort">
+                    <property name="height">200</property>
+                    <property name="padding">10</property>
+                    <property name="width">820</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="tk.Text" id="t_serialport_text_box">
+                        <property name="height">12</property>
+                        <property name="insertunfocussed">none</property>
+                        <property name="text" translatable="yes">Serial data logging not implemented yet...</property>
+                        <property name="width">51</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">310</property>
+                          <property name="y">10</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="f_SerialPortSettings">
+                        <property name="height">215</property>
+                        <property name="text" translatable="yes">Serial Port Settings</property>
+                        <property name="width">300</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_serialport">
+                            <property name="text" translatable="yes">Serial port</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_speed">
+                            <property name="text" translatable="yes">Speed (baud)</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_databits">
+                            <property name="text" translatable="yes">Data bits</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_stopbits">
+                            <property name="text" translatable="yes">Stop bits</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_parity">
+                            <property name="text" translatable="yes">Parity</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_serialport_flowcontrol">
+                            <property name="text" translatable="yes">Flow control</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">160</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serialport_serialport">
+                            <property name="text" translatable="yes">/dev/ttyUSB0</property>
+                            <property name="textvariable">string:v_serialport_serialport</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serialport_speed">
+                            <property name="text" translatable="yes">9600</property>
+                            <property name="textvariable">string:v_serialport_speed</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serialport_databits">
+                            <property name="text" translatable="yes">8</property>
+                            <property name="textvariable">string:v_serialport_databits</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serialport_stopbits">
+                            <property name="text" translatable="yes">1</property>
+                            <property name="textvariable">string:v_serialport_stopbits</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="tk.OptionMenu" id="opt_serialport_parity">
+                            <property name="value">None</property>
+                            <property name="values">None,Odd,Even</property>
+                            <property name="variable">string:v_serialport_parity</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">30</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="tk.OptionMenu" id="opt_serialport_flowcontrol">
+                            <property name="value">None</property>
+                            <property name="values">None,XON/XOFF,RTS/CTS</property>
+                            <property name="variable">string:v_serialport_flowcontrol</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">30</property>
+                              <property name="width">160</property>
+                              <property name="x">120</property>
+                              <property name="y">160</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="f_SerialPortTransmitData">
+                        <property name="text" translatable="yes">Serial Port Transmit Messages</property>
+                        <property name="width">200</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">160</property>
+                          <property name="width">725</property>
+                          <property name="x">0</property>
+                          <property name="y">270</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="label2">
+                            <property name="text" translatable="yes">TX: Message 1</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label4">
+                            <property name="text" translatable="yes">TX: Message 2</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serial_txmsg1">
+                            <property name="textvariable">string:v_serial_txmsg1</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serial_txmsg2">
+                            <property name="textvariable">string:v_serial_txmsg2</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_send1">
+                            <property name="command" type="command" cbtype="with_wid">serial_transmit</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Send</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">8</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_send2">
+                            <property name="command" type="command" cbtype="with_wid">serial_transmit</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Send</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">38</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label5">
+                            <property name="text" translatable="yes">TX: Message 3</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label6">
+                            <property name="text" translatable="yes">TX: Message 4</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serial_txmsg3">
+                            <property name="textvariable">string:v_serial_txmsg3</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_serial_txmsg4">
+                            <property name="textvariable">string:v_serial_txmsg4</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_send3">
+                            <property name="command" type="command" cbtype="with_wid">serial_transmit</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Send</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">68</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_send4">
+                            <property name="command" type="command" cbtype="with_wid">serial_transmit</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Send</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">98</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="btn_serial_connect">
+                        <property name="command" type="command" cbtype="simple">serial_connect</property>
+                        <property name="style">GreenButton.TButton</property>
+                        <property name="text" translatable="yes">Connect</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">10</property>
+                          <property name="y">225</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="btn_serial_disconnect">
+                        <property name="command" type="command" cbtype="simple">serial_disconnect</property>
+                        <property name="state">disabled</property>
+                        <property name="style">RedButton.TButton</property>
+                        <property name="text" translatable="yes">Disconnect</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">110</property>
+                          <property name="y">225</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="l_videohelp_serial">
+                        <property name="cursor">hand2</property>
+                        <property name="foreground">blue</property>
+                        <property name="text" translatable="yes">Video Help</property>
+                        <bind sequence="&lt;Button-1&gt;" handler="videohelp_serial" add="True" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">650</property>
+                          <property name="y">240</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="f_SerialPortReceiveData">
+                        <property name="text" translatable="yes">Serial Port Receive Messages</property>
+                        <property name="width">200</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">180</property>
+                          <property name="width">725</property>
+                          <property name="x">0</property>
+                          <property name="y">450</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="label13">
+                            <property name="text" translatable="yes">RX: Message 1</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label14">
+                            <property name="text" translatable="yes">RX: Message 2</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry5">
+                            <property name="textvariable">string:v_serial_rxmsg1</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry6">
+                            <property name="textvariable">string:v_serial_rxmsg2</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_receive1">
+                            <property name="command" type="command" cbtype="with_wid">serial_receive_test</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Test</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">8</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_receive2">
+                            <property name="command" type="command" cbtype="with_wid">serial_receive_test</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Test</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">38</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label17">
+                            <property name="text" translatable="yes">RX: Message 3</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label18">
+                            <property name="text" translatable="yes">RX: Message 4</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry7">
+                            <property name="textvariable">string:v_serial_rxmsg3</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry8">
+                            <property name="textvariable">string:v_serial_rxmsg4</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">500</property>
+                              <property name="x">120</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_receive3">
+                            <property name="command" type="command" cbtype="with_wid">serial_receive_test</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Test</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">68</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_receive4">
+                            <property name="command" type="command" cbtype="with_wid">serial_receive_test</property>
+                            <property name="state">disabled</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Test</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">98</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label19">
+                            <property name="text" translatable="yes">RX: Timeout</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry9">
+                            <property name="textvariable">string:v_serial_rx_test_timeout</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">50</property>
+                              <property name="x">120</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label20">
+                            <property name="text" translatable="yes">RX: Status</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">200</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry10">
+                            <property name="state">readonly</property>
+                            <property name="textvariable">string:v_serial_rx_test_status</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">340</property>
+                              <property name="x">280</property>
+                              <property name="y">130</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="btn_ser_receive_stop">
+                            <property name="command" type="command" cbtype="with_wid">serial_receive_test</property>
+                            <property name="state">disabled</property>
+                            <property name="style">RedButton.TButton</property>
+                            <property name="text" translatable="yes">Stop</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">25</property>
+                              <property name="width">60</property>
+                              <property name="x">640</property>
+                              <property name="y">128</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_JTAG">
+                <property name="text" translatable="yes">Debugger</property>
+                <child>
+                  <object class="ttk.Frame" id="f_JTAG">
+                    <property name="height">200</property>
+                    <property name="padding">10</property>
+                    <property name="width">200</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Labelframe" id="labelframe2">
+                        <property name="height">200</property>
+                        <property name="text" translatable="yes">OpenOCD</property>
+                        <property name="width">725</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="l_jtag_adaptor">
+                            <property name="text" translatable="yes">Adaptor Config</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_jtag_target">
+                            <property name="text" translatable="yes">Target Config</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_jtag_halt">
+                            <property name="text" translatable="yes">Halt on Connection</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">110</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_debug_adaptor" named="True">
+                            <property name="textvariable">string:v_debug_adaptor</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">450</property>
+                              <property name="x">160</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_debug_target" named="True">
+                            <property name="textvariable">string:v_debug_target</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">450</property>
+                              <property name="x">160</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="tk.OptionMenu" id="opt_jtag_halt">
+                            <property name="value">Yes</property>
+                            <property name="values">Yes,No</property>
+                            <property name="variable">string:v_debug_halt</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="height">30</property>
+                              <property name="width">80</property>
+                              <property name="x">160</property>
+                              <property name="y">100</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="l_jtag_additional">
+                            <property name="text" translatable="yes">Commands</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="e_debug_commands" named="True">
+                            <property name="textvariable">string:v_debug_commands</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">450</property>
+                              <property name="x">160</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="Adaptor_Config" named="True">
+                            <property name="command" type="command" cbtype="with_wid">browse_debug_config</property>
+                            <property name="text" translatable="yes">Browse</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">620</property>
+                              <property name="y">8</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="Target_Config" named="True">
+                            <property name="command" type="command" cbtype="with_wid">browse_debug_config</property>
+                            <property name="text" translatable="yes">Browse</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">620</property>
+                              <property name="y">38</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="l_videohelp_jtag">
+                        <property name="cursor">hand2</property>
+                        <property name="foreground">blue</property>
+                        <property name="text" translatable="yes">Video Help</property>
+                        <bind sequence="&lt;Button-1&gt;" handler="videohelp_debugger" add="True" />
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">650</property>
+                          <property name="y">240</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="btn_jtag_connect">
+                        <property name="command" type="command" cbtype="simple">debug_connect</property>
+                        <property name="style">GreenButton.TButton</property>
+                        <property name="text" translatable="yes">Connect</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">10</property>
+                          <property name="y">225</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="btn_jtag_disconnect">
+                        <property name="command" type="command" cbtype="simple">debug_disconnect</property>
+                        <property name="state">disabled</property>
+                        <property name="style">RedButton.TButton</property>
+                        <property name="text" translatable="yes">Disconnect</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="x">110</property>
+                          <property name="y">225</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="n_About">
+                <property name="text" translatable="yes">About</property>
+                <child>
+                  <object class="ttk.Frame" id="frame4">
+                    <property name="height">200</property>
+                    <property name="width">200</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="tk.Canvas" id="c_about_logo">
+                        <property name="background">black</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">512</property>
+                          <property name="width">512</property>
+                          <property name="x">110</property>
+                          <property name="y">40</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="tk.Message" id="message_about">
+                        <property name="justify">left</property>
+                        <property name="text" translatable="yes">Glitchy v0.1 is a graphical front end to the NewAE ChipWhisperer. It is meant to show visually what is happening when a glitch is being configured.
+
+It's free and open source, if it's missing a critical feature learn to code and add it... :)
+
+The GUI can be edited with Pygubu Designer, design files are included.</property>
+                        <property name="width">600</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">150</property>
+                          <property name="width">600</property>
+                          <property name="x">60</property>
+                          <property name="y">600</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
