@@ -21,7 +21,7 @@ prior to using Glitchy.
 
 requirements.txt contains the necessary Python packages. They can be installed by running
 
-```pip3 -r requirements.txt```
+```pip3 install -r requirements.txt```
 
 ---
 
