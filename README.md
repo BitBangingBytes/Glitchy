@@ -23,6 +23,12 @@ requirements.txt contains the necessary Python packages. They can be installed b
 
 ```pip3 install -r requirements.txt```
 
+To Run:
+```
+cd src
+python3 Main.py
+```
+
 ---
 
 # Disclaimer
