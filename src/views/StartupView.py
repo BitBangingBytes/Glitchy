@@ -298,17 +298,16 @@ class StartupView(View, Events, FieldValidate):
         def unroll_app():
             # height = 0  # self.mainwindow.attributes("height")
             if self.height < 885:
-                self.height += 10
-                print(self.height)
+                self.height += 5
                 self.mainwindow.geometry("750x" + str(self.height))
-                self.mainwindow.after(10, unroll_app)
+                self.mainwindow.after(5, unroll_app)
             else:
                 self.mainwindow.resizable(False, False)
 
         def fade_away():
             alpha = self.splash.attributes("-alpha")
             if alpha > 0:
-                alpha -= .01
+                alpha -= .006
                 self.splash.attributes("-alpha", alpha)
                 self.splash.after(10, fade_away)
             else:
