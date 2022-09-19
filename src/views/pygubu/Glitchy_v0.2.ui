@@ -2,7 +2,7 @@
 <interface version="1.3">
   <object class="tk.Toplevel" id="toplevel1">
     <property name="height">885</property>
-    <property name="resizable">none</property>
+    <property name="resizable">vertically</property>
     <property name="title" translatable="yes">Glitchy</property>
     <property name="width">750</property>
     <containerlayout manager="grid">

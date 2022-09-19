@@ -33,6 +33,7 @@ class StartupView(View, Events, FieldValidate):
         self.parameters = None
         self.com_port = None
         self.splash = None
+        self.height = 0
 
         self.builder = builder = pygubu.Builder()
         builder.add_resource_path(PROJECT_PATH)
@@ -294,6 +295,15 @@ class StartupView(View, Events, FieldValidate):
     @Override
     """
     def main(self):
+        def unroll_app():
+            # height = 0  # self.mainwindow.attributes("height")
+            if self.height < 885:
+                self.height += 10
+                print(self.height)
+                self.mainwindow.geometry("750x" + str(self.height))
+                self.mainwindow.after(10, unroll_app)
+            else:
+                self.mainwindow.resizable(False, False)
 
         def fade_away():
             alpha = self.splash.attributes("-alpha")
@@ -325,7 +335,8 @@ class StartupView(View, Events, FieldValidate):
         self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.mainwindow.eval(f'tk::PlaceWindow . center')
         self.update_values()
-
+        self.mainwindow.geometry("20x750")
+        unroll_app()
         splash_screen()
         self.mainwindow.mainloop()
 
