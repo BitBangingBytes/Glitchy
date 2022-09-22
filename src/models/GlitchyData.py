@@ -26,9 +26,10 @@ class GlitchyDataModel:
             'powersupply_ch1_volt_set': '',  'powersupply_ch2_volt_set': '',
             'powersupply_ch1_curr_set': '',  'powersupply_ch2_curr_set': '',
             'powersupply_ch1_enable': '',    'powersupply_ch2_enable': '',
+            'powersupply_ch1_toggle': '',    'powersupply_ch2_toggle': '',
             # ------ Serial Port vars ------
-            'sp_port': '',     'sp_speed': '',  'sp_databits': '',
-            'sp_stopbits': '', 'sp_parity': '', 'sp_flowcontrol': '',
+            'sp_port': '',     'sp_speed': '',  'sp_databits': '', 'sp_stopbits': '',
+            'sp_parity': '', 'sp_flowcontrol': '', 'sp_rxtimeout': '',
             'sp_tx1': '', 'sp_tx2': '', 'sp_tx3': '', 'sp_tx4': '',
             'sp_rx1': '', 'sp_rx2': '', 'sp_rx3': '', 'sp_rx4': '',
             # ------ Debugger vars ------

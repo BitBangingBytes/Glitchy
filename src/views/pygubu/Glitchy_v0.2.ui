@@ -913,7 +913,7 @@ Timeout</property>
                         <property name="text" translatable="yes">Envox BB3</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="height">220</property>
+                          <property name="height">280</property>
                           <property name="width">725</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
@@ -924,7 +924,7 @@ Timeout</property>
                             <property name="text" translatable="yes">Power Settings</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="height">120</property>
+                              <property name="height">220</property>
                               <property name="width">200</property>
                               <property name="x">250</property>
                               <property name="y">25</property>
@@ -1041,6 +1041,111 @@ Timeout</property>
                                 </layout>
                               </object>
                             </child>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_set1" named="True">
+                                <property name="command" type="command" cbtype="with_wid">powersupply_set_button</property>
+                                <property name="state">disabled</property>
+                                <property name="style">GreenButton.TButton</property>
+                                <property name="text" translatable="yes">Set</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">90</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="label9">
+                                <property name="text" translatable="yes">Toggle
+Time</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">10</property>
+                                  <property name="y">135</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_set2" named="True">
+                                <property name="command" type="command" cbtype="with_wid">powersupply_set_button</property>
+                                <property name="state">disabled</property>
+                                <property name="style">GreenButton.TButton</property>
+                                <property name="text" translatable="yes">Set</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">90</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Separator" id="separator3">
+                                <property name="orient">horizontal</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="height">1</property>
+                                  <property name="width">170</property>
+                                  <property name="x">10</property>
+                                  <property name="y">125</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="entry1">
+                                <property name="textvariable">string:v_powersupply_toggle1</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">135</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="entry2">
+                                <property name="textvariable">string:v_powersupply_toggle2</property>
+                                <property name="validate">key</property>
+                                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">135</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_toggle1" named="True">
+                                <property name="command" type="command" cbtype="with_wid">powersupply_toggle_button</property>
+                                <property name="state">disabled</property>
+                                <property name="style">GreenButton.TButton</property>
+                                <property name="text" translatable="yes">Trig.</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">70</property>
+                                  <property name="y">165</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_toggle2" named="True">
+                                <property name="command" type="command" cbtype="with_wid">powersupply_toggle_button</property>
+                                <property name="state">disabled</property>
+                                <property name="style">GreenButton.TButton</property>
+                                <property name="text" translatable="yes">Trig.</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">50</property>
+                                  <property name="x">130</property>
+                                  <property name="y">165</property>
+                                </layout>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
@@ -1151,7 +1256,7 @@ Timeout</property>
                             <property name="text" translatable="yes">Network Settings</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="height">120</property>
+                              <property name="height">160</property>
                               <property name="width">230</property>
                               <property name="x">10</property>
                               <property name="y">25</property>
@@ -1178,7 +1283,7 @@ Timeout</property>
                               <object class="ttk.Entry" id="e_powersupply_ipaddr">
                                 <property name="textvariable">string:v_powersupply_ipaddr</property>
                                 <layout manager="place">
-                                  <property name="width">120</property>
+                                  <property name="width">100</property>
                                   <property name="x">100</property>
                                   <property name="y">30</property>
                                 </layout>
@@ -1196,45 +1301,42 @@ Timeout</property>
                                 </layout>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Button" id="btn_powersupply_connect">
-                            <property name="command" type="command" cbtype="simple">powersupply_connect</property>
-                            <property name="style">GreenButton.TButton</property>
-                            <property name="text" translatable="yes">Connect</property>
-                            <layout manager="place">
-                              <property name="anchor">nw</property>
-                              <property name="x">20</property>
-                              <property name="y">160</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Button" id="btn_powersupply_disconnect">
-                            <property name="command" type="command" cbtype="simple">powersupply_disconnect</property>
-                            <property name="state">disabled</property>
-                            <property name="style">RedButton.TButton</property>
-                            <property name="text" translatable="yes">Disconnect</property>
-                            <layout manager="place">
-                              <property name="anchor">nw</property>
-                              <property name="x">120</property>
-                              <property name="y">160</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Button" id="btn_powersupply_set">
-                            <property name="command" type="command" cbtype="simple">powersupply_set_button</property>
-                            <property name="state">disabled</property>
-                            <property name="style">GreenButton.TButton</property>
-                            <property name="text" translatable="yes">Set</property>
-                            <layout manager="place">
-                              <property name="anchor">nw</property>
-                              <property name="width">60</property>
-                              <property name="x">260</property>
-                              <property name="y">160</property>
-                            </layout>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_connect">
+                                <property name="command" type="command" cbtype="simple">powersupply_connect</property>
+                                <property name="style">GreenButton.TButton</property>
+                                <property name="text" translatable="yes">Connect</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">20</property>
+                                  <property name="y">100</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Button" id="btn_powersupply_disconnect">
+                                <property name="command" type="command" cbtype="simple">powersupply_disconnect</property>
+                                <property name="state">disabled</property>
+                                <property name="style">RedButton.TButton</property>
+                                <property name="text" translatable="yes">Disconnect</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="x">120</property>
+                                  <property name="y">100</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Separator" id="separator4">
+                                <property name="orient">horizontal</property>
+                                <layout manager="place">
+                                  <property name="anchor">nw</property>
+                                  <property name="width">205</property>
+                                  <property name="x">10</property>
+                                  <property name="y">90</property>
+                                </layout>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1248,7 +1350,7 @@ Timeout</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="x">650</property>
-                          <property name="y">240</property>
+                          <property name="y">300</property>
                         </layout>
                       </object>
                     </child>

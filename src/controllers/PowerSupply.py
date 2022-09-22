@@ -85,3 +85,31 @@ class PowerSupply:
             self.powersupply.get_measurement(self.ps_measurements)
             for key in self.ps_measurements:
                 self.glitchy_data.set_parameter(key, self.ps_measurements[key])
+
+    def config_toggle_time(self, ch1=None, ch2=None):
+        """ Load all toggle data into power supply but don't trigger.
+
+            This will be useful for the automated glitch to load once then trigger on each pass.
+        """
+        if ch1:
+            self.glitchy_data.set_parameter('powersupply_ch1_toggle', str(ch1))
+            self.powersupply.config_toggle_time(
+                channel=1,
+                voltage=float(self.glitchy_data.get_parameter("powersupply_ch1_volt_set")),
+                current=float(self.glitchy_data.get_parameter("powersupply_ch1_curr_set")),
+                toggle_time=float(ch1))
+        if ch2:
+            self.glitchy_data.set_parameter('powersupply_ch2_toggle', str(ch2))
+            self.powersupply.config_toggle_time(
+                channel=2,
+                voltage=float(self.glitchy_data.get_parameter("powersupply_ch2_volt_set")),
+                current=float(self.glitchy_data.get_parameter("powersupply_ch2_curr_set")),
+                toggle_time=float(ch2))
+
+    def trigger_toggle(self):
+        self.powersupply.trigger_toggle()
+
+    def set_toggle(self, channel: str):
+        """Send ABORt command to power supply to exit trigger mode"""
+        self.powersupply.set_toggle(channel)
+

@@ -58,8 +58,7 @@ class Events:
                 print(f'Power selected for Event {event_number}')
             option[event_number]['state'] = 'readonly'
             option[event_number].set('')
-            option[event_number].config(values=['Toggle CH1 0.25 Sec', 'Toggle CH1 2 Sec',
-                                                'Toggle CH2 0.25 Sec', 'Toggle CH2 2 Sec'])
+            option[event_number].config(values=['Toggle CH1', 'Toggle CH2', 'Toggle CH1 & CH2'])
             delay[event_number]['state'] = 'normal'
         elif event[event_number].get() == 'I/O':
             if __debug__:

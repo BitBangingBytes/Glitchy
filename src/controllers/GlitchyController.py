@@ -32,6 +32,7 @@ class GlitchyController(Controller):
         self.glitcher_pause = False
         self.glitcher_stop = False
         self.glitcher_success = False
+        self.power_toggle_config = False  # Used for one-time config loading
         # Initial view (only view at this time) to load
         self.startupView = self.loadView("Startup")
 
@@ -66,23 +67,34 @@ class GlitchyController(Controller):
             self.glitchy_data.set_parameter("glitchcounter_missed", glitchcounter_missed)
 
         def trigger_power(option):
-            if option == "Toggle CH1 0.25 Sec":
-                time.sleep(0.1)
-                self.powersupply.set_settings(ch1_en=False)
-                time.sleep(0.25)
-                self.powersupply.set_settings(ch1_en=True)
-            elif option == "Toggle CH1 2 Sec":
-                self.powersupply.set_settings(ch1_en=False)
-                time.sleep(2)
-                self.powersupply.set_settings(ch1_en=True)
-            elif option == "Toggle CH2 0.25 Sec":
-                self.powersupply.set_settings(ch2_en=False)
-                time.sleep(0.25)
-                self.powersupply.set_settings(ch2_en=True)
-            elif option == "Toggle CH2 2 Sec":
-                self.powersupply.set_settings(ch2_en=False)
-                time.sleep(2)
-                self.powersupply.set_settings(ch2_en=True)
+            trigger_fudge_factor = 0.25
+            if option == "Toggle CH1":
+                if self.power_toggle_config:
+                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
+                    self.powersupply.set_toggle(channel="1")
+                    self.power_toggle_config = False
+                self.powersupply.trigger_toggle()
+                time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch1_toggle")) + trigger_fudge_factor)
+            elif option == "Toggle CH2":
+                if self.power_toggle_config:
+                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                    self.powersupply.set_toggle(channel="2")
+                    self.power_toggle_config = False
+                self.powersupply.trigger_toggle()
+                time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch2_toggle")) + trigger_fudge_factor)
+            elif option == "Toggle CH1 & CH2":
+                if self.power_toggle_config:
+                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"),
+                                                        ch2=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                    self.powersupply.set_toggle(channel="ALL")
+                    self.power_toggle_config = False
+                self.powersupply.trigger_toggle()
+                ch1_time = float(self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
+                ch2_time = float(self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                if ch1_time > ch2_time:
+                    time.sleep(ch1_time + trigger_fudge_factor)
+                else:
+                    time.sleep(ch2_time)
             else:
                 pass
 
@@ -209,6 +221,7 @@ class GlitchyController(Controller):
             self.glitcher_running = False
             self.glitcher_pause = False
             self.glitcher_stop = False
+            self.power_toggle_config = True
 
         glitchtime_currentvalue = 0
         glitchstrength_currentvalue = 0
@@ -226,6 +239,8 @@ class GlitchyController(Controller):
         # Start GUI refreshing from Data Model
         clear_live_values()
         self.startupView.update_automated_glitch_refresh = True
+        # Config Power Supply Toggle
+        self.power_toggle_config = True
         # Configure chipwhisperer
         self.cw.scope.adc.timeout = float(self.glitchy_data.get_parameter("cw_glitchtimeout"))
         self.cw.scope.adc.samples = 0

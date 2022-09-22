@@ -1,5 +1,6 @@
 import os
 import pathlib
+import time
 from threading import Thread
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -82,6 +83,8 @@ class StartupView(View, Events, FieldValidate):
                 "v_powersupply_startingcurrent2",
                 "v_powersupply_ch1_enable",
                 "v_powersupply_ch2_enable",
+                "v_powersupply_toggle1",
+                "v_powersupply_toggle2",
                 "v_powersupply_measuredvoltage1",
                 "v_powersupply_measuredvoltage2",
                 "v_powersupply_measuredcurrent1",
@@ -169,6 +172,8 @@ class StartupView(View, Events, FieldValidate):
         self.v_powersupply_startingcurrent2 = None
         self.v_powersupply_ch1_enable = None
         self.v_powersupply_ch2_enable = None
+        self.v_powersupply_toggle1 = None
+        self.v_powersupply_toggle2 = None
         self.v_powersupply_measuredvoltage1 = None
         self.v_powersupply_measuredvoltage2 = None
         self.v_powersupply_measuredcurrent1 = None
@@ -208,7 +213,10 @@ class StartupView(View, Events, FieldValidate):
         self.btn_ser_receive4 = self.builder.get_object('btn_ser_receive4')
         self.btn_ps_disconnect = self.builder.get_object('btn_powersupply_disconnect')
         self.btn_ps_connect = self.builder.get_object('btn_powersupply_connect')
-        self.btn_ps_set = self.builder.get_object('btn_powersupply_set')
+        self.btn_ps_set1 = self.builder.get_object('btn_powersupply_set1')
+        self.btn_ps_set2 = self.builder.get_object('btn_powersupply_set2')
+        self.btn_ps_toggle1 = self.builder.get_object('btn_powersupply_toggle1')
+        self.btn_ps_toggle2 = self.builder.get_object('btn_powersupply_toggle2')
         self.run_button = self.builder.get_object('Run')
         self.pause_button = self.builder.get_object('Pause')
         self.stop_button = self.builder.get_object('Stop')
@@ -586,6 +594,8 @@ class StartupView(View, Events, FieldValidate):
             'powersupply_ch2_curr_set': self.v_powersupply_startingcurrent2.get(),
             'powersupply_ch1_enable': self.v_powersupply_ch1_enable.get(),
             'powersupply_ch2_enable': self.v_powersupply_ch2_enable.get(),
+            'powersupply_ch1_toggle': self.v_powersupply_toggle1.get(),
+            'powersupply_ch2_toggle': self.v_powersupply_toggle2.get(),
             'sp_port': self.v_serialport_serialport.get(),
             'sp_speed': self.v_serialport_speed.get(),
             'sp_databits': self.v_serialport_databits.get(),
@@ -596,6 +606,11 @@ class StartupView(View, Events, FieldValidate):
             "sp_tx2": self.v_serial_txmsg2.get(),
             "sp_tx3": self.v_serial_txmsg3.get(),
             "sp_tx4": self.v_serial_txmsg4.get(),
+            "sp_rx1": self.v_serial_rxmsg1.get(),
+            "sp_rx2": self.v_serial_rxmsg2.get(),
+            "sp_rx3": self.v_serial_rxmsg3.get(),
+            "sp_rx4": self.v_serial_rxmsg4.get(),
+            "sp_rxtimeout": self.v_serial_rx_test_timeout.get(),
             'debug_adaptor': self.v_debug_adaptor.get(),
             'debug_target': self.v_debug_target.get(),
             'debug_halt': self.v_debug_halt.get(),
@@ -662,6 +677,8 @@ class StartupView(View, Events, FieldValidate):
             self.v_powersupply_startingcurrent2.set(self.glitchy_data.get_parameter("powersupply_ch2_curr_set"))
             self.v_powersupply_ch1_enable.set(bool(self.glitchy_data.get_parameter("powersupply_ch1_enable")))
             self.v_powersupply_ch2_enable.set(bool(self.glitchy_data.get_parameter("powersupply_ch2_enable")))
+            self.v_powersupply_toggle1.set(self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
+            self.v_powersupply_toggle2.set(self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
             self.v_serialport_serialport.set(self.glitchy_data.get_parameter("sp_port"))
             self.v_serialport_speed.set(self.glitchy_data.get_parameter("sp_speed"))
             self.v_serialport_databits.set(self.glitchy_data.get_parameter("sp_databits"))
@@ -672,6 +689,11 @@ class StartupView(View, Events, FieldValidate):
             self.v_serial_txmsg2.set(self.glitchy_data.get_parameter("sp_tx2"))
             self.v_serial_txmsg3.set(self.glitchy_data.get_parameter("sp_tx3"))
             self.v_serial_txmsg4.set(self.glitchy_data.get_parameter("sp_tx4"))
+            self.v_serial_rxmsg1.set(self.glitchy_data.get_parameter("sp_rx1"))
+            self.v_serial_rxmsg2.set(self.glitchy_data.get_parameter("sp_rx2"))
+            self.v_serial_rxmsg3.set(self.glitchy_data.get_parameter("sp_rx3"))
+            self.v_serial_rxmsg4.set(self.glitchy_data.get_parameter("sp_rx4"))
+            self.v_serial_rx_test_timeout.set(self.glitchy_data.get_parameter("sp_rxtimeout"))
             self.v_debug_adaptor.set(self.glitchy_data.get_parameter("debug_adaptor"))
             self.v_debug_target.set(self.glitchy_data.get_parameter("debug_target"))
             self.v_debug_halt.set(self.glitchy_data.get_parameter("debug_halt"))
@@ -698,21 +720,53 @@ class StartupView(View, Events, FieldValidate):
             return
         self.btn_ps_disconnect['state'] = 'normal'
         self.btn_ps_connect['state'] = 'disabled'
-        self.btn_ps_set['state'] = 'normal'
+        self.btn_ps_set1['state'] = 'normal'
+        self.btn_ps_set2['state'] = 'normal'
+        self.btn_ps_toggle1['state'] = 'normal'
+        self.btn_ps_toggle2['state'] = 'normal'
 
     def powersupply_disconnect(self):
         self.glitchyController.powersupply.disconnect()
         self.btn_ps_disconnect['state'] = 'disabled'
         self.btn_ps_connect['state'] = 'normal'
-        self.btn_ps_set['state'] = 'disabled'
+        self.btn_ps_set1['state'] = 'disabled'
+        self.btn_ps_set2['state'] = 'disabled'
+        self.btn_ps_toggle1['state'] = 'disabled'
+        self.btn_ps_toggle2['state'] = 'disabled'
 
-    def powersupply_set_button(self):
-        self.glitchyController.powersupply.set_settings(self.v_powersupply_ch1_enable.get(),
-                                                        self.v_powersupply_ch2_enable.get(),
-                                                        self.v_powersupply_startingvoltage1.get(),
-                                                        self.v_powersupply_startingcurrent1.get(),
-                                                        self.v_powersupply_startingvoltage2.get(),
-                                                        self.v_powersupply_startingcurrent2.get())
+    def powersupply_set_button(self, widget_id):
+        if widget_id == 'btn_powersupply_set1':
+            self.glitchyController.powersupply.set_settings(
+                ch1_en=self.v_powersupply_ch1_enable.get(), ch2_en=None,
+                ch1_volt=self.v_powersupply_startingvoltage1.get(), ch2_volt='',
+                ch1_curr=self.v_powersupply_startingcurrent1.get(), ch2_curr='')
+        elif widget_id == 'btn_powersupply_set2':
+            self.glitchyController.powersupply.set_settings(
+                ch1_en=None, ch2_en=self.v_powersupply_ch2_enable.get(),
+                ch1_volt='', ch2_volt=self.v_powersupply_startingvoltage2.get(),
+                ch1_curr='', ch2_curr=self.v_powersupply_startingcurrent2.get())
+        else:
+            return
+
+    def powersupply_toggle_button(self, widget_id):
+        if widget_id == 'btn_powersupply_toggle1':
+            self.btn_ps_toggle1['state'] = 'disabled'
+            toggle1_time = self.v_powersupply_toggle1.get()
+            self.glitchyController.powersupply.config_toggle_time(ch1=toggle1_time)
+            self.glitchyController.powersupply.set_toggle(channel="1")
+            self.glitchyController.powersupply.trigger_toggle()
+            time.sleep(float(toggle1_time)+2.0)
+            self.btn_ps_toggle1['state'] = 'normal'
+        elif widget_id == 'btn_powersupply_toggle2':
+            print("Toggle 2 pressed")
+            self.btn_ps_toggle2['state'] = 'disabled'
+            toggle2_time = self.v_powersupply_toggle2.get()
+            self.glitchyController.powersupply.config_toggle_time(ch2=toggle2_time)
+            self.glitchyController.powersupply.set_toggle(channel="2")
+            self.glitchyController.powersupply.trigger_toggle()
+            time.sleep(float(toggle2_time)+2.0)
+            print("Toggle 2 complete")
+            self.btn_ps_toggle2['state'] = 'normal'
 
     def serial_connect(self):
         if self.glitchyController.serial.connect(
