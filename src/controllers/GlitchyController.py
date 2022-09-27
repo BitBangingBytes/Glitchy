@@ -305,6 +305,79 @@ class GlitchyController(Controller):
         #     self.cw.stop = True
         pass
 
+    def serial_tx(self, tx_message: str):
+        byte_array_data = self.serial.parse_string(tx_message)
+        self.glitchy_data.enqueue("serial", ("TX: " + tx_message + '\n'))
+        self.serial.send(byte_array_data)
+
+    def serial_rx_match(self, match_data: str = "", timeout: float = None, size: int = None) -> int:
+        """ Receive data and report if there was a valid match prior to timeout.
+
+            Return the match location in the received data, -1 for no match. """
+        def calculate_highlight(byte_data, byte_len, match_loc, length):
+            location_counter = match_loc
+            new_loc = 0
+            new_len = length
+            byte_len -= 1  # Zero Ref
+            exiting_special_char = False
+            exiting_string = False
+            if match_loc < 1:
+                return new_loc, new_len
+            for i in byte_data:
+                # print(f"Location Counter: {location_counter}")
+                if i < 32 or i > 126:
+                    new_loc += 4
+                    if exiting_string:
+                        exiting_string = False
+                        new_loc += 3
+                        # print("Exited String")
+                if 31 < i < 127:
+                    new_loc += 1
+                    exiting_string = True
+                location_counter -= 1
+                if location_counter == 0:
+                    # print("Break from Location Counting")
+                    break
+            # print(f"New Loc: {new_loc}, New Len: {new_len}, Byte Data Len: {byte_len}")
+            # Deal with different edge cases
+            if (31 < byte_data[match_loc-1] < 127) and (byte_data[match_loc] < 32 or byte_data[match_loc] > 126):
+                # String ending before special character
+                new_loc += 3
+            if (31 < byte_data[match_loc-1] < 127) and (31 < byte_data[match_loc] < 127):
+                # String starting in the middle
+                new_loc += 1
+                new_len -= 1
+            if (31 < byte_data[match_loc + byte_len - 1] < 127) and (31 < byte_data[match_loc + byte_len] < 127):
+                # String ending in the middle
+                new_len -= 1
+            return new_loc, new_len
+
+        header_len = 4
+        match_data_bytes = bytes(self.serial.parse_string(match_data))
+        match_data_bytes_len = len(match_data_bytes)
+        rx_data = self.serial.receive(timeout, size)
+        match_location = bytes(rx_data).find(match_data_bytes)
+        rx_string = self.serial.parse_bytearray(rx_data)
+        if match_location == -1:
+            # No match
+            self.glitchy_data.enqueue("serial", ("RX: " + rx_string + "\n"))
+            return -1
+        match_len = len(match_data)
+        match_location, match_len = calculate_highlight(rx_data, match_data_bytes_len, match_location, match_len)
+        self.glitchy_data.enqueue("serial", ("RX: " + rx_string + "\n"),
+                                  f"Highlight,{header_len + match_location},{match_len}")
+        return match_location
+
+    def serial_rx_flood(self, timeout: float = 0, size: int = 0) -> int:
+        """ Detect if there is a large amount of data being sent via the serial port.
+
+            This is indicative of a successful firmware dumping glitch.
+            Return the number of bytes received in the timeout period. """
+        pass
+
+    def serial_rx_stop(self):
+        self.serial.stop_read = True
+
     @staticmethod
     def videohelp(topic=None):
         if topic == "Automated Glitch":

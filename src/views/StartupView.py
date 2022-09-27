@@ -242,6 +242,8 @@ class StartupView(View, Events, FieldValidate):
         self.post_delay_2 = self.builder.get_object('post_delay_2')
         self.post_delay_3 = self.builder.get_object('post_delay_3')
 
+        self.serial_text_box = self.builder.get_object('t_serialport_text_box')
+
     def _setup_ttk_styles(self):
         # ttk styles configuration
         self.style = style = ttk.Style()
@@ -348,6 +350,28 @@ class StartupView(View, Events, FieldValidate):
         self.mainwindow.mainloop()
 
     def update_values(self):
+        def update_serial_logging():
+            while self.glitchyController.glitchy_data.is_empty("serial") is False:
+                data, command = self.glitchyController.glitchy_data.dequeue("serial")
+                if command != "":
+                    command = command.split(",")
+                else:
+                    self.serial_text_box.insert(tk.END, data)
+                    return
+
+                if command[0] == "Highlight":
+                    # print(f"Command: {command}")
+                    highlight_start = command[1]
+                    highlight_len = command[2]
+                    highlight_end = str(int(highlight_start) + int(highlight_len))
+                    current_line, current_pos = self.serial_text_box.index('end - 1 line').split(".")
+                    # print(f"Current Line: {current_line}, Current Position: {current_pos} and Tk.END: {tk.END}")
+                    # print(f"Highlight start: {highlight_start}, Highlight Length: {highlight_len}")
+                    self.serial_text_box.insert(tk.END, data)
+                    self.serial_text_box.tag_add('start', str(current_line + "." + highlight_start),
+                                                 str(current_line + "." + highlight_end))
+                    self.serial_text_box.tag_config("start", background="black", foreground="white")
+
         def update_powersupply_measurements():
             if (value := self.glitchy_data.get_parameter('powersupply_ch1_volt_meas')) is not None:
                 self.v_powersupply_measuredvoltage1.set(str(value))
@@ -451,7 +475,6 @@ class StartupView(View, Events, FieldValidate):
         # If we are running an automated glitch then don't read from the power supply,
         # this delays the glitching routine and could cause other issues.
         if self.glitchyController.glitcher_running:
-        # if self.update_automated_glitch_refresh:
             update_automated_glitch()
             if self.glitchyController.glitcher_success is True:
                 self.glitchyController.glitcher_success = False
@@ -459,6 +482,7 @@ class StartupView(View, Events, FieldValidate):
                 messagebox.showinfo(title="SUCCESS!", message="Post-Glitch Event Found!\nGlitching Paused.")
         # -----------------------------------------------------
         else:
+            update_serial_logging()
             update_automated_glitch()
             update_chipwhisperer_calculated_fields()
             update_powersupply_measurements()
@@ -805,45 +829,22 @@ class StartupView(View, Events, FieldValidate):
             self.btn_ser_receive4['state'] = 'disabled'
 
     def serial_transmit(self, event=None):
-        # print(event)
-        def show_message():
-            messagebox.showerror(title="Serial Warning", message="Field empty or formatted incorrectly.")
-
+        tx_message = None
         if event == 'btn_ser_send1':
-            tx_message = self.glitchyController.serial.parse(self.v_serial_txmsg1.get())
-            if tx_message:
-                nbytes = self.glitchyController.serial.send(tx_message)
-                if __debug__:
-                    print(nbytes)
-            else:
-                show_message()
+            tx_message = self.v_serial_txmsg1.get()
         elif event == 'btn_ser_send2':
-            tx_message = self.glitchyController.serial.parse(self.v_serial_txmsg2.get())
-            if tx_message:
-                nbytes = self.glitchyController.serial.send(tx_message)
-                if __debug__:
-                    print(nbytes)
-            else:
-                show_message()
+            tx_message = self.v_serial_txmsg2.get()
         elif event == 'btn_ser_send3':
-            tx_message = self.glitchyController.serial.parse(self.v_serial_txmsg3.get())
-            if tx_message:
-                nbytes = self.glitchyController.serial.send(tx_message)
-                if __debug__:
-                    print(nbytes)
-            else:
-                show_message()
+            tx_message = self.v_serial_txmsg3.get()
         elif event == 'btn_ser_send4':
-            tx_message = self.glitchyController.serial.parse(self.v_serial_txmsg4.get())
-            if tx_message:
-                nbytes = self.glitchyController.serial.send(tx_message)
-                if __debug__:
-                    print(nbytes)
-            else:
-                show_message()
+            tx_message = self.v_serial_txmsg4.get()
         else:
             print("Don't know how we got here...")
-        pass
+
+        if tx_message:
+            self.glitchyController.serial_tx(tx_message)
+        else:
+            messagebox.showerror(title="Serial Warning", message="Field empty or formatted incorrectly.")
 
     def serial_receive_test(self, widget_id):
         """
@@ -851,63 +852,41 @@ class StartupView(View, Events, FieldValidate):
 
         Should probably start a thread for the receive function.
         """
-        if __debug__:
-            print(f"{widget_id} is the widget id.")
+        rx_message = None
+        message_num = None
         rx_timeout = self.v_serial_rx_test_timeout.get()
-        self.v_serial_rx_test_status.set("")
-
         if rx_timeout != '':
             rx_timeout = float(rx_timeout)
         else:
-            # Wait FOREVER!
-            rx_timeout = None
+            rx_timeout = None  # Wait FOREVER!
+        self.v_serial_rx_test_status.set("")
 
         if widget_id == 'btn_ser_receive1':
-            rx_message = self.glitchyController.serial.parse(self.v_serial_rxmsg1.get())
-            if rx_message:
-                # Returns -1 for no match upon timeout, 0 or greater for match location in string received
-                value = self.glitchyController.serial.receive_test_match(rx_message, timeout=rx_timeout, size=None)
-                if value > -1:
-                    self.v_serial_rx_test_status.set(f"RX Message 1 found!")
-                else:
-                    self.v_serial_rx_test_status.set(f"RX Message 1 not found before timeout.")
-                print(value)
-                return value
+            rx_message = self.v_serial_rxmsg1.get()
+            message_num = 1
         elif widget_id == 'btn_ser_receive2':
-            rx_message = self.glitchyController.serial.parse(self.v_serial_rxmsg2.get())
-            if rx_message:
-                # Returns -1 for no match upon timeout, 0 or greater for match location in string received
-                value = self.glitchyController.serial.receive_test_match(rx_message, timeout=rx_timeout, size=None)
-                if value > -1:
-                    self.v_serial_rx_test_status.set(f"RX Message 2 found!")
-                else:
-                    self.v_serial_rx_test_status.set(f"RX Message 2 not found before timeout.")
-                return value
+            rx_message = self.v_serial_rxmsg2.get()
+            message_num = 2
         elif widget_id == 'btn_ser_receive3':
-            rx_message = self.glitchyController.serial.parse(self.v_serial_rxmsg3.get())
-            if rx_message:
-                # Returns -1 for no match upon timeout, 0 or greater for match location in string received
-                value = self.glitchyController.serial.receive_test_match(rx_message, timeout=rx_timeout, size=None)
-                if value > -1:
-                    self.v_serial_rx_test_status.set(f"RX Message 3 found!")
-                else:
-                    self.v_serial_rx_test_status.set(f"RX Message 3 not found before timeout.")
-                return value
+            rx_message = self.v_serial_rxmsg3.get()
+            message_num = 3
         elif widget_id == 'btn_ser_receive4':
-            rx_message = self.glitchyController.serial.parse(self.v_serial_rxmsg4.get())
-            if rx_message:
-                # Returns -1 for no match upon timeout, 0 or greater for match location in string received
-                value = self.glitchyController.serial.receive_test_match(rx_message, timeout=rx_timeout, size=None)
-                if value > -1:
-                    self.v_serial_rx_test_status.set(f"RX Message 4 found!")
-                else:
-                    self.v_serial_rx_test_status.set(f"RX Message 4 not found before timeout.")
-                return value
+            rx_message = self.v_serial_rxmsg4.get()
+            message_num = 4
         elif widget_id == 'btn_ser_receive_stop':
             # Set flag here that stops the serial receive thread
-            pass
+            self.glitchyController.serial_rx_stop()
         else:
             print("Don't know how we got here...")
+
+        if rx_message:
+            # Returns -1 for no match upon timeout, 0 or greater for match location in string received
+            value = self.glitchyController.serial_rx_match(rx_message, timeout=rx_timeout, size=None)
+            if value > -1:
+                self.v_serial_rx_test_status.set(f"RX Message {message_num} found!")
+            else:
+                self.v_serial_rx_test_status.set(f"RX Message {message_num} not found before timeout.")
+            return
 
     def cw_configure(self):
         """ Reconfigure entire chipwhisperer each time this button is clicked

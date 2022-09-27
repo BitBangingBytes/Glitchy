@@ -1,6 +1,7 @@
 """
     Model description
 """
+import queue
 
 
 class GlitchyDataModel:
@@ -42,6 +43,8 @@ class GlitchyDataModel:
             'progressbar_strength': '', 'progressbar_overall': '', 'glitchcounter_triggered': '',
             'glitchcounter_missed': ''
         }
+        self.serial_log = queue.Queue()
+        self.automated_log = queue.Queue()
 
     def load_data(self, load_data):
         try:
@@ -66,3 +69,26 @@ class GlitchyDataModel:
 
     def all_parameters(self):
         return self.parameters
+
+    def enqueue(self, fifo: str, data: str, command: str = ""):
+        """ fifo is the name of the queue to use, data is the information to load """
+        if fifo == "serial":
+            self.serial_log.put(data)
+            self.serial_log.put(command)
+        if fifo == "automated_glitch_log":
+            self.automated_log.put(data)
+            self.automated_log.put(command)
+
+    def dequeue(self, fifo: str) -> [str, str]:
+        """ fifo is the name of the queue to use, data is the information to return """
+        if fifo == "serial":
+            # Return Data and Command
+            return self.serial_log.get(), self.serial_log.get()
+        if fifo == "automated_glitch_log":
+            return self.automated_log.get(), self.automated_log.get()
+
+    def is_empty(self, fifo: str) -> bool:
+        if fifo == "serial":
+            return len(self.serial_log.queue) == 0
+        if fifo == "automated_glitch_log":
+            return len(self.automated_log.queue) == 0

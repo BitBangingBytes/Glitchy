@@ -1375,7 +1375,6 @@ Time</property>
                       <object class="tk.Text" id="t_serialport_text_box">
                         <property name="height">12</property>
                         <property name="insertunfocussed">none</property>
-                        <property name="text" translatable="yes">Serial data logging not implemented yet...</property>
                         <property name="width">51</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>

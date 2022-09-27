@@ -1,4 +1,6 @@
 import serial
+import time
+from threading import Thread
 
 
 class Serial:
@@ -10,11 +12,11 @@ class Serial:
         self.databits = None
         self.stopbits = None
         self.parity = None
-        self.timeout = 1
-        pass
+        self.rx_data = None
+        self.stop_read = False
 
     @staticmethod
-    def parse(message: str) -> bytearray:
+    def parse_string(message: str) -> bytearray:
         """ Takes a string, parses it for hex and strings and returns a bytearray
 
             Hex data and strings can be mixed and entered like this:
@@ -51,6 +53,28 @@ class Serial:
         else:
             return bytearray(0)
 
+    @staticmethod
+    def parse_bytearray(data: bytearray) -> str:
+        parsed_message = ""
+        previous_string = False
+        for i in data:
+            if i < 32 or i > 126:
+                # Parse as raw hex character
+                if previous_string:
+                    parsed_message += '" '
+                parsed_message += "${:02x} ".format(i).upper()
+                previous_string = False
+            else:
+                # Parse as string
+                if previous_string:
+                    parsed_message += f"{chr(i)}"
+                else:
+                    parsed_message += f'"{chr(i)}'
+                previous_string = True
+        if previous_string:
+            parsed_message += '"'
+        return parsed_message
+
     def connect(self, port, baudrate, bytesize, stopbits, parity, timeout):
         try:
             self.serial = serial.Serial(port=port, baudrate=int(baudrate),
@@ -72,22 +96,31 @@ class Serial:
     def send(self, tx_data: bytearray):
         # Return the number of bytes sent
         self.serial.reset_output_buffer()
-        return self.serial.write(tx_data)
+        nbytes = self.serial.write(tx_data)
+        return nbytes
 
-    def receive_test_match(self, rx_match: bytearray, timeout: float, size=None) -> int:
+    def receive(self, timeout: float = None, size: int = None) -> bytearray:
+        def receive_loop():
+            timeout_val = time.time() + timeout
+            while True:
+                if self.serial.in_waiting > 0:
+                    # read the bytes and convert from binary array to ASCII
+                    self.rx_data += self.serial.read(self.serial.in_waiting)
+                time.sleep(0.01)
+                if time.time() > timeout_val:
+                    break
+                if self.stop_read:
+                    self.stop_read = False
+                    break
+
+        self.rx_data = bytearray()
         # Define a timeout period so we don't get stuck here
         self.serial.timeout = timeout
-
         # Clear the buffer and start fresh
         self.serial.reset_input_buffer()
-        if __debug__:
-            print(f"RX data to match is: {bytes(rx_match)}")
+        # Old method using read_until which returns immediately on data match, freezes app while running
+        # rx_data = self.serial.read_until(expected=bytes(rx_match), size=size)
 
-        # Data should already be parsed and ready to go here
-        rx_data = self.serial.read_until(expected=bytes(rx_match), size=size)
-        if __debug__:
-            print(f"RX data received is: {bytes(rx_data)}")
-
-        # Return -1 if no match, location of string start if match (0 or greater)
-        rx_string = bytes(rx_data)
-        return rx_string.find(bytes(rx_match))
+        # New method which also freezes the app but receives data the whole time specified regardless of a match
+        receive_loop()
+        return self.rx_data
