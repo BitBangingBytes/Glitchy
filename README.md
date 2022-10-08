@@ -19,9 +19,13 @@ Ensure you have privileges to use USB serial devices (dialout in Ubuntu), Debug 
 OpenOCD and permissions to access the Chipwhisperer. Those devices should be configured properly 
 prior to using Glitchy.
 
-requirements.txt contains the necessary Python packages. They can be installed by running
+requirements.txt contains the necessary Python packages. Install with the following commands:
 
-```pip3 install -r requirements.txt```
+```
+git clone https://github.com/BitBangingBytes/Glitchy.git
+cd Glitchy
+pip3 install -r requirements.txt
+```
 
 To Run:
 ```
