@@ -11,7 +11,7 @@ Glitchy is a visual interface to the world of glitching. It ties together other 
 such as power supplies, serial interfaces and debugging tools which are often used as part
 of a successful glitch attack.
 
-Check out the [YouTube](https://youtu.be/TrEsTD9i0LU) video introduction.
+Check out the [YouTube](https://youtu.be/TrEsTD9i0LU) video introduction
 
 ---
 
