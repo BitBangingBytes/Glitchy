@@ -522,10 +522,10 @@
                       </object>
                     </child>
                     <child>
-                      <object class="tk.Text" id="text_log">
+                      <object class="tk.Text" id="t_automated_glitch_text_box" named="True">
                         <property name="height">10</property>
-                        <property name="text" translatable="yes">Logging not implemented
-yet...</property>
+                        <property name="text" translatable="yes"> ..:Welcome to GL1TchY:..
+</property>
                         <property name="width">50</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
@@ -559,6 +559,18 @@ yet...</property>
                           <property name="width">37</property>
                           <property name="x">425</property>
                           <property name="y">530</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Scrollbar" id="log_scrollbar" named="True">
+                        <property name="orient">vertical</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">370</property>
+                          <property name="relheight">0.0</property>
+                          <property name="x">265</property>
+                          <property name="y">438</property>
                         </layout>
                       </object>
                     </child>
@@ -619,7 +631,7 @@ Trigger</property>
                             <property name="textvariable">string:v_cw_cyclesaftertrigger</property>
                             <property name="validate">key</property>
                             <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
-                            <property name="width">11</property>
+                            <property name="width">10</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
                               <property name="x">120</property>
@@ -632,7 +644,7 @@ Trigger</property>
                             <property name="text" translatable="yes">Cycles</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="x">140</property>
+                              <property name="x">130</property>
                               <property name="y">5</property>
                             </layout>
                           </object>
@@ -642,7 +654,7 @@ Trigger</property>
                             <property name="text" translatable="yes">Time</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="x">230</property>
+                              <property name="x">215</property>
                               <property name="y">5</property>
                             </layout>
                           </object>
@@ -653,7 +665,7 @@ Trigger</property>
                             <property name="textvariable">string:v_cw_trigger_calctime</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="x">230</property>
+                              <property name="x">210</property>
                               <property name="y">30</property>
                             </layout>
                           </object>
@@ -674,7 +686,7 @@ Trigger</property>
                             <property name="textvariable">string:v_cw_glitchcycles</property>
                             <property name="validate">key</property>
                             <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
-                            <property name="width">11</property>
+                            <property name="width">10</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
                               <property name="x">120</property>
@@ -688,7 +700,7 @@ Trigger</property>
                             <property name="textvariable">string:v_cw_glitch_calctime</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="x">230</property>
+                              <property name="x">210</property>
                               <property name="y">70</property>
                             </layout>
                           </object>
@@ -886,6 +898,18 @@ Timeout</property>
                               <property name="anchor">nw</property>
                               <property name="x">150</property>
                               <property name="y">80</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="b_cw_printsettings" named="True">
+                            <property name="command" type="command" cbtype="simple">cw_print_settings</property>
+                            <property name="state">disabled</property>
+                            <property name="text" translatable="yes">Print Settings</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">125</property>
+                              <property name="y">150</property>
                             </layout>
                           </object>
                         </child>
@@ -1152,11 +1176,10 @@ Time</property>
                           <object class="ttk.Labelframe" id="l_EndingPower">
                             <property name="height">100</property>
                             <property name="text" translatable="yes">Measured Values</property>
-                            <property name="width">200</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
                               <property name="height">120</property>
-                              <property name="width">200</property>
+                              <property name="width">250</property>
                               <property name="x">460</property>
                               <property name="y">25</property>
                             </layout>
@@ -1186,7 +1209,7 @@ Time</property>
                                 <property name="textvariable">string:v_powersupply_measuredvoltage1</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="width">50</property>
+                                  <property name="width">70</property>
                                   <property name="x">70</property>
                                   <property name="y">30</property>
                                 </layout>
@@ -1198,8 +1221,8 @@ Time</property>
                                 <property name="textvariable">string:v_powersupply_measuredvoltage2</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="width">50</property>
-                                  <property name="x">130</property>
+                                  <property name="width">70</property>
+                                  <property name="x">150</property>
                                   <property name="y">30</property>
                                 </layout>
                               </object>
@@ -1210,7 +1233,7 @@ Time</property>
                                 <property name="textvariable">string:v_powersupply_measuredcurrent1</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="width">50</property>
+                                  <property name="width">70</property>
                                   <property name="x">70</property>
                                   <property name="y">60</property>
                                 </layout>
@@ -1222,8 +1245,8 @@ Time</property>
                                 <property name="textvariable">string:v_powersupply_measuredcurrent2</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="width">50</property>
-                                  <property name="x">130</property>
+                                  <property name="width">70</property>
+                                  <property name="x">150</property>
                                   <property name="y">60</property>
                                 </layout>
                               </object>
@@ -1233,7 +1256,7 @@ Time</property>
                                 <property name="text" translatable="yes">CH 1</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="x">80</property>
+                                  <property name="x">87</property>
                                   <property name="y">10</property>
                                 </layout>
                               </object>
@@ -1243,7 +1266,7 @@ Time</property>
                                 <property name="text" translatable="yes">CH 2</property>
                                 <layout manager="place">
                                   <property name="anchor">nw</property>
-                                  <property name="x">140</property>
+                                  <property name="x">167</property>
                                   <property name="y">10</property>
                                 </layout>
                               </object>
@@ -1375,7 +1398,7 @@ Time</property>
                       <object class="tk.Text" id="t_serialport_text_box">
                         <property name="height">12</property>
                         <property name="insertunfocussed">none</property>
-                        <property name="width">51</property>
+                        <property name="width">50</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="x">310</property>
@@ -1949,6 +1972,130 @@ Time</property>
                             </layout>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="labelframe1">
+                        <property name="height">200</property>
+                        <property name="text" translatable="yes">Serial Port Receive Flood Parameters</property>
+                        <property name="width">200</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">160</property>
+                          <property name="width">725</property>
+                          <property name="x">0</property>
+                          <property name="y">650</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Label" id="label10">
+                            <property name="text" translatable="yes">Minimum Data Rate:</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label11">
+                            <property name="text" translatable="yes">Data Capture Size:</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label12">
+                            <property name="text" translatable="yes">Receive Flood Timeout:</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">10</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry3">
+                            <property name="textvariable">string:v_serial_flood_datarate</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">100</property>
+                              <property name="x">175</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry4">
+                            <property name="textvariable">string:v_serial_flood_capturesize</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">int_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">100</property>
+                              <property name="x">175</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry11">
+                            <property name="textvariable">string:v_serial_flood_timeout</property>
+                            <property name="validate">key</property>
+                            <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">float_restrict</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">100</property>
+                              <property name="x">175</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label21">
+                            <property name="text" translatable="yes">Sustained transfer rate to stay in flood routine (Bytes per second)</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">290</property>
+                              <property name="y">10</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label22">
+                            <property name="text" translatable="yes">Generally a little larger than the flash you are dumping (Bytes)</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">290</property>
+                              <property name="y">40</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label23">
+                            <property name="text" translatable="yes">Number of seconds to wait for a flood</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">290</property>
+                              <property name="y">70</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Scrollbar" id="serial_scrollbar" named="True">
+                        <property name="orient">vertical</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">210</property>
+                          <property name="x">718</property>
+                          <property name="y">10</property>
+                        </layout>
                       </object>
                     </child>
                   </object>

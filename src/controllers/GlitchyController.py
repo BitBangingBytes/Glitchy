@@ -2,6 +2,8 @@
 import json
 import time
 import webbrowser
+import sys
+import binascii
 
 from controllers.ChipWhisperer import ChipWhisperer
 from controllers.EnvoxBB3 import EnvoxBB3
@@ -99,21 +101,7 @@ class GlitchyController(Controller):
                 pass
 
         def trigger_io(option):
-            """ Still work to do
-
-            """
-            self.cw.trigger(option)
-
-            if option == "High to Low":
-                pass
-            elif option == "Low to High":
-                pass
-            elif option == "High Momentary Low":
-                pass
-            elif option == "Low Momentary High":
-                pass
-            else:
-                pass
+            self.cw.trigger(trigger_type=option)
 
         def trigger_serial(option):
             if self.serial.connected:
@@ -145,6 +133,18 @@ class GlitchyController(Controller):
                     if self.startupView.serial_receive_test(widget_id="btn_ser_receive4") > -1:
                         self.glitcher_pause = True
                         self.glitcher_success = True
+                elif option == "Serial Flood":
+                    # self.serial.timeout = 2
+                    # ser_data = self.serial.serial_flood(timeout=2)
+                    timeout = float(self.startupView.v_serial_flood_timeout.get())
+                    capture_size = int(self.startupView.v_serial_flood_capturesize.get())
+                    datarate = int(self.startupView.v_serial_flood_datarate.get())
+                    ser_data = self.serial_rx_flood(timeout=timeout, flood_rate=datarate, dump_size=capture_size)
+                    if ser_data is not None:
+                        print(f"Read {ser_data} bytes before timeout occurred.")
+                        if ser_data > capture_size:
+                            self.glitcher_pause = True
+                            self.glitcher_success = True
                 else:
                     pass
             else:
@@ -189,6 +189,8 @@ class GlitchyController(Controller):
             if event_type == "pre":
                 for x in range(1, 4):
                     if event := pre_event[x]:
+                        self.glitchy_data.enqueue("automated_glitch_log",
+                                                  f"Pre: {event}: {pre_option[x]} \n")
                         if event == "Power":
                             trigger_power(pre_option[x])
                         elif event == "I/O":
@@ -198,10 +200,14 @@ class GlitchyController(Controller):
                         else:
                             pass
                         if delay := pre_delay[x]:
+                            self.glitchy_data.enqueue("automated_glitch_log",
+                                                      f"Pre: Delay: {pre_delay[x]} seconds\n")
                             time.sleep(float(delay))
             elif event_type == "post":
                 for x in range(1, 4):
                     if event := post_event[x]:
+                        self.glitchy_data.enqueue("automated_glitch_log",
+                                                  f"Post: {event}: {post_option[x]} \n")
                         if event == "OpenOCD":
                             trigger_openocd(post_option[x])
                         elif event == "I/O":
@@ -211,6 +217,8 @@ class GlitchyController(Controller):
                         else:
                             pass
                         if delay := post_delay[x]:
+                            self.glitchy_data.enqueue("automated_glitch_log",
+                                                      f"Post: Delay: {post_delay[x]} seconds\n")
                             time.sleep(float(delay))
 
         def stop():
@@ -270,21 +278,30 @@ class GlitchyController(Controller):
 
                 trigger_events("pre")
                 glitchtime_currentvalue = self.cw.scope.glitch.ext_offset
-                # Send the Glitch
+
+                # Update all user facing functions prior to the glitch
+                self.glitchy_data.enqueue("automated_glitch_log",
+                                          f"Glitching:\n"
+                                          f"  Width: {glitchstrength_currentvalue}\n"
+                                          f"  Offset: {glitchtime_currentvalue}\n")
+                self.cw.scope.glitch.ext_offset += int(self.glitchy_data.get_parameter("GlitchTimeStepSize"))
+                progressbar_time = time_step + progressbar_time
+                progressbar_overall = total_step + progressbar_overall
+                update_live_values()
+                # Send the glitch
                 self.cw.scope.arm()
                 if self.cw.scope.capture():
                     glitchcounter_missed = glitchcounter_missed + 1
                 else:
                     glitchcounter_triggered = glitchcounter_triggered + 1
                     trigger_events("post")  # Only running post trigger events if the trigger was successful
-                #
-                self.cw.scope.glitch.ext_offset += int(self.glitchy_data.get_parameter("GlitchTimeStepSize"))
-                progressbar_time = time_step + progressbar_time
-                progressbar_overall = total_step + progressbar_overall
-
-                update_live_values()
+                # Glitch finished
                 timer_stop = time.time()
-                print(timer_stop - timer_start)
+                total_time = timer_stop - timer_start
+                print(total_time)
+                self.glitchy_data.enqueue("automated_glitch_log", "###########################\n"
+                                                                  f"Total Time: {round(total_time, 2)} Seconds\n"
+                                                                  "###########################\n\n")
             self.cw.scope.glitch.repeat += int(self.glitchy_data.get_parameter("GlitchStrengthStepSize"))
             self.cw.scope.glitch.ext_offset = int(self.glitchy_data.get_parameter("GlitchTimeStart"))
             # Update progress bar
@@ -368,11 +385,56 @@ class GlitchyController(Controller):
                                   f"Highlight,{header_len + match_location},{match_len}")
         return match_location
 
-    def serial_rx_flood(self, timeout: float = 0, size: int = 0) -> int:
+    def serial_rx_flood(self, timeout: float = 0, flood_rate: int = 20, dump_size: int = 1000) -> int:
         """ Detect if there is a large amount of data being sent via the serial port.
 
             This is indicative of a successful firmware dumping glitch.
             Return the number of bytes received in the timeout period. """
+
+        def chunkstring(string, length):
+            return (string[0 + i:length + i] for i in range(0, len(string), length))
+
+        rx_data = bytearray()
+        received_data = False
+        start_time = time.time()
+        timeout_val = time.time() + timeout
+        dumping_flag = False
+        while True:
+            raw_rx = self.serial.raw_rx(timeout=0.5)
+            rx_data += raw_rx
+            if len(raw_rx) > flood_rate:
+                if dumping_flag is False:
+                    dumping_flag = True
+                    self.glitchy_data.enqueue("automated_glitch_log",
+                                              f"Dumping: {len(raw_rx)} Bps\n")
+                timeout_val = time.time() + timeout
+            if len(raw_rx) > 0:
+                self.glitchy_data.enqueue("serial", ("Received: " + str(len(raw_rx)) + ' bytes\n'))
+            sys.stdout.write(raw_rx.hex()[1:-1])
+            # lines = (i.strip() for i in raw_rx.hex()[1:-1].splitlines())
+            # for line in lines:
+            #     for chunk in chunkstring(line, 80):
+            #         # self.glitchy_data.enqueue("serial", (chunk + "\n"))
+            #         sys.stdout.write(chunk)
+            #         # This appears to take too much time and causes the app to slow down
+            #         # self.startupView.serial_text_box.insert("end", chunk)
+            #         # self.startupView.serial_text_box.see("end")
+
+            if time.time() > timeout_val:
+                self.glitchy_data.enqueue("automated_glitch_log",
+                                          f"Dumping: Timed Out\n")
+                break
+            if len(rx_data) > dump_size:
+                # Need to write this data to a log file
+                self.glitchy_data.enqueue("automated_glitch_log",
+                                          ("Successfully dumped " + str(len(rx_data)) + " bytes in " +
+                                           str(int(time.time() - start_time)) + " seconds.\n"))
+                # Writing to file
+                with open(f"Data_Dump_{time.asctime()}.bin", "wb") as dump1:
+                    # Writing data to a file
+                    dump1.write(rx_data)
+                break
+        return len(rx_data)
         pass
 
     def serial_rx_stop(self):

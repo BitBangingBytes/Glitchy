@@ -105,6 +105,9 @@ class StartupView(View, Events, FieldValidate):
                 "v_serial_rxmsg4",
                 "v_serial_rx_test_timeout",
                 "v_serial_rx_test_status",
+                "v_serial_flood_datarate",
+                "v_serial_flood_capturesize",
+                "v_serial_flood_timeout",
                 "v_debug_adaptor",
                 "v_debug_target",
                 "v_debug_halt",
@@ -112,6 +115,7 @@ class StartupView(View, Events, FieldValidate):
             ],
         )
         self._setup_buttons()
+        self._setup_textboxes()
         self._setup_ttk_styles()
         # Add all hover tips in here
         self.hover_tips()
@@ -194,6 +198,9 @@ class StartupView(View, Events, FieldValidate):
         self.v_serial_rxmsg4 = None
         self.v_serial_rx_test_timeout = None
         self.v_serial_rx_test_status = None
+        self.v_serial_flood_datarate = None
+        self.v_serial_flood_capturesize = None
+        self.v_serial_flood_timeout = None
         self.v_debug_adaptor = None
         self.v_debug_target = None
         self.v_debug_halt = None
@@ -222,6 +229,7 @@ class StartupView(View, Events, FieldValidate):
         self.stop_button = self.builder.get_object('Stop')
         self.glitch_button = self.builder.get_object('b_cw_glitch')
         self.io_button = self.builder.get_object('b_cw_io')
+        self.print_settings_button = self.builder.get_object('b_cw_printsettings')
 
         self.pre_event_1 = self.builder.get_object('pre_event_1')
         self.pre_event_2 = self.builder.get_object('pre_event_2')
@@ -242,7 +250,18 @@ class StartupView(View, Events, FieldValidate):
         self.post_delay_2 = self.builder.get_object('post_delay_2')
         self.post_delay_3 = self.builder.get_object('post_delay_3')
 
+    def _setup_textboxes(self):
         self.serial_text_box = self.builder.get_object('t_serialport_text_box')
+        self.serial_text_scrollbar = self.builder.get_object('serial_scrollbar')
+        #  communicate back to the scrollbar
+        self.serial_text_scrollbar['command'] = self.serial_text_box.yview
+        self.serial_text_box['yscrollcommand'] = self.serial_text_scrollbar.set
+
+        self.automated_glitch_text_box = self.builder.get_object('t_automated_glitch_text_box')
+        self.automated_glitch_text_scrollbar = self.builder.get_object('log_scrollbar')
+        #  communicate back to the scrollbar
+        self.automated_glitch_text_scrollbar['command'] = self.automated_glitch_text_box.yview
+        self.automated_glitch_text_box['yscrollcommand'] = self.automated_glitch_text_scrollbar.set
 
     def _setup_ttk_styles(self):
         # ttk styles configuration
@@ -344,8 +363,12 @@ class StartupView(View, Events, FieldValidate):
         self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.mainwindow.eval(f'tk::PlaceWindow . center')
         self.update_values()
-        self.mainwindow.geometry("20x750")
-        unroll_app()
+        # Uncomment this for app animation on load
+        # self.mainwindow.geometry("750x20")
+        # unroll_app()
+        self.mainwindow.geometry("750x885")  # Comment this out if using the app unroll feature
+        self.mainwindow.resizable(False, False)
+
         splash_screen()
         self.mainwindow.mainloop()
 
@@ -357,6 +380,7 @@ class StartupView(View, Events, FieldValidate):
                     command = command.split(",")
                 else:
                     self.serial_text_box.insert(tk.END, data)
+                    self.serial_text_box.see(tk.END)
                     return
 
                 if command[0] == "Highlight":
@@ -445,6 +469,15 @@ class StartupView(View, Events, FieldValidate):
         def update_automated_glitch():
             # Add code here to refresh data on automated glitch screen from Data Model
             # automated_glitch() will be changing values and updating Data Model
+            while self.glitchyController.glitchy_data.is_empty("automated_glitch_log") is False:
+                data, command = self.glitchyController.glitchy_data.dequeue("automated_glitch_log")
+                if command != "":
+                    command = command.split(",")
+                else:
+                    self.automated_glitch_text_box.insert(tk.END, data)
+                    self.automated_glitch_text_box.see(tk.END)
+                    return
+
             if self.glitchy_data.get_parameter("glitchtime_currentvalue") is not None:
                 self.glitchtime_currentvalue.set(self.glitchy_data.get_parameter("glitchtime_currentvalue"))
             else:
@@ -468,14 +501,13 @@ class StartupView(View, Events, FieldValidate):
             self.progressbar_time.set(self.glitchy_data.get_parameter("progressbar_time"))
             self.progressbar_strength.set(self.glitchy_data.get_parameter("progressbar_strength"))
             self.progressbar_overall.set(self.glitchy_data.get_parameter("progressbar_overall"))
-            # If we are performing an automated glitch then update GUI values
-            # if self.update_automated_glitch_refresh:
-            #     self.mainwindow.after(200, self.update_automated_glitch)
+
         # -----------------------------------------------------
         # If we are running an automated glitch then don't read from the power supply,
         # this delays the glitching routine and could cause other issues.
         if self.glitchyController.glitcher_running:
             update_automated_glitch()
+            update_serial_logging()
             if self.glitchyController.glitcher_success is True:
                 self.glitchyController.glitcher_success = False
                 print("Glitcher Success!!")
@@ -541,13 +573,16 @@ class StartupView(View, Events, FieldValidate):
             "sp_tx2": self.v_serial_txmsg2.get(),
             "sp_tx3": self.v_serial_txmsg3.get(),
             "sp_tx4": self.v_serial_txmsg4.get(),
+            "sp_flood_timeout": self.v_serial_flood_timeout.get(),
+            "sp_flood_capturesize": self.v_serial_flood_capturesize.get(),
+            "sp_flood_datarate": self.v_serial_flood_datarate.get(),
             'debug_adaptor': self.v_debug_adaptor.get(),
             'debug_target': self.v_debug_target.get(),
             'debug_halt': self.v_debug_halt.get(),
             'debug_commands': self.v_debug_commands.get()}
         for key in parameters:
             self.glitchy_data.set_parameter(key, parameters[key])
-        print(self.glitchy_data.parameters)
+        # print(self.glitchy_data.parameters)
 
     def close(self):
         return
@@ -635,6 +670,9 @@ class StartupView(View, Events, FieldValidate):
             "sp_rx3": self.v_serial_rxmsg3.get(),
             "sp_rx4": self.v_serial_rxmsg4.get(),
             "sp_rxtimeout": self.v_serial_rx_test_timeout.get(),
+            "sp_flood_timeout": self.v_serial_flood_timeout.get(),
+            "sp_flood_capturesize": self.v_serial_flood_capturesize.get(),
+            "sp_flood_datarate": self.v_serial_flood_datarate.get(),
             'debug_adaptor': self.v_debug_adaptor.get(),
             'debug_target': self.v_debug_target.get(),
             'debug_halt': self.v_debug_halt.get(),
@@ -718,6 +756,9 @@ class StartupView(View, Events, FieldValidate):
             self.v_serial_rxmsg3.set(self.glitchy_data.get_parameter("sp_rx3"))
             self.v_serial_rxmsg4.set(self.glitchy_data.get_parameter("sp_rx4"))
             self.v_serial_rx_test_timeout.set(self.glitchy_data.get_parameter("sp_rxtimeout"))
+            self.v_serial_flood_datarate.set(self.glitchy_data.get_parameter("sp_flood_datarate"))
+            self.v_serial_flood_capturesize.set(self.glitchy_data.get_parameter("sp_flood_capturesize"))
+            self.v_serial_flood_timeout.set(self.glitchy_data.get_parameter("sp_flood_timeout"))
             self.v_debug_adaptor.set(self.glitchy_data.get_parameter("debug_adaptor"))
             self.v_debug_target.set(self.glitchy_data.get_parameter("debug_target"))
             self.v_debug_halt.set(self.glitchy_data.get_parameter("debug_halt"))
@@ -910,9 +951,13 @@ class StartupView(View, Events, FieldValidate):
         self.run_button['state'] = 'normal'
         self.glitch_button['state'] = 'normal'
         self.io_button['state'] = 'normal'
+        self.print_settings_button['state'] = 'normal'
 
     def cw_io(self):
         self.glitchyController.cw.trigger(trigger_type="High, Low, HiZ")
+
+    def cw_print_settings(self):
+        self.glitchyController.cw.print_settings()
 
     def cw_glitch(self):
         """ Called when the Glitch button is pressed.

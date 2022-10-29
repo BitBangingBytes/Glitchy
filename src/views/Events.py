@@ -109,7 +109,8 @@ class Events:
             option[event_number]['state'] = 'readonly'
             option[event_number].set('')
             option[event_number].config(values=['Match Message 1', 'Match Message 2',
-                                                'Match Message 3', 'Match Message 4'])
+                                                'Match Message 3', 'Match Message 4',
+                                                'Serial Flood'])
             delay[event_number]['state'] = 'normal'
         else:
             print(f'Nothing selected for Event {event_number}, clear option and delay')

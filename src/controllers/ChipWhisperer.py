@@ -75,13 +75,16 @@ class ChipWhisperer:
         else:
             self.scope.io.tio3 = "high_z"  # Set output high impedance
 
+    def print_settings(self):
+        print(self.scope)
+
     def glitch(self, trigger_time, timeout, glitch_width):
         """ Send a single glitch
 
             optionally send it after a specified number of clock cycles.
             Returns True if glitch was sent and False if it timed out.
         """
-        print(trigger_time, timeout)
+        # print(trigger_time, timeout)
         self.scope.glitch.repeat = glitch_width
         self.scope.adc.timeout = timeout
         self.scope.adc.samples = 0
@@ -92,8 +95,6 @@ class ChipWhisperer:
             self.scope.arm()
             # Capture() is blocking, long timeouts freeze app
             if self.scope.capture():
-                if __debug__:
-                    print(self.scope)
                 return False
             return True
         # Just send a glitch if no "Time after trigger" value is provided
