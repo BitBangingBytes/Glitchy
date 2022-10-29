@@ -443,15 +443,15 @@ class GlitchyController(Controller):
     @staticmethod
     def videohelp(topic=None):
         if topic == "Automated Glitch":
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+            webbrowser.open_new_tab("https://www.youtube.com/watch?v=TrEsTD9i0LU")
         elif topic == "Chipwhisperer":
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=329")
         elif topic == "Power Supply":
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=453")
         elif topic == "Serial":
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=1200")
         elif topic == "OpenOCD":
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=630")
         else:
             webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
 
