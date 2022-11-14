@@ -1,5 +1,7 @@
 import time
 import chipwhisperer as cw
+import logging
+logger = logging.getLogger(__name__)
 
 
 class ChipWhisperer:
@@ -17,7 +19,7 @@ class ChipWhisperer:
         except Exception:
             raise
 
-        print("INFO: Found ChipWhisperer😍")
+        logger.info("Found ChipWhisperer")
         time.sleep(0.05)
         self.scope.default_setup()
 
@@ -76,7 +78,7 @@ class ChipWhisperer:
             self.scope.io.tio3 = "high_z"  # Set output high impedance
 
     def print_settings(self):
-        print(self.scope)
+        logger.info(self.scope)
 
     def glitch(self, trigger_time, timeout, glitch_width):
         """ Send a single glitch
@@ -84,7 +86,7 @@ class ChipWhisperer:
             optionally send it after a specified number of clock cycles.
             Returns True if glitch was sent and False if it timed out.
         """
-        # print(trigger_time, timeout)
+        logger.debug(trigger_time, timeout)
         self.scope.glitch.repeat = glitch_width
         self.scope.adc.timeout = timeout
         self.scope.adc.samples = 0

@@ -1,6 +1,7 @@
 import serial
 import time, sys
-from threading import Thread
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Serial:
@@ -84,7 +85,7 @@ class Serial:
             return True
         except serial.SerialException as err:
             if __debug__:
-                print(err)
+                logger.error(err)
             self.connected = False
             return False
 
@@ -124,37 +125,6 @@ class Serial:
         # New method which also freezes the app but receives data the whole time specified regardless of a match
         receive_loop()
         return self.rx_data
-
-    # def serial_flood(self, timeout: float = None, size: int = None) -> bytearray:
-    #     max_dump_size = 2500000  # Change to a user defined value from the GUI
-    #     def receive_loop():
-    #         received_data = False
-    #         timeout_val = time.time() + timeout
-    #         while True:
-    #             if self.serial.in_waiting > 0:
-    #                 received_data = True
-    #                 # read the bytes and convert from binary array to ASCII
-    #                 data = self.serial.read(self.serial.in_waiting)
-    #                 self.rx_data += data
-    #                 print(f"Received: {len(self.rx_data)} bytes\r", end='')
-    #                 # Keep receiving data until no bytes received for timeout length
-    #                 if len(data) > 20:
-    #                     timeout_val = time.time() + timeout
-    #             time.sleep(0.1)
-    #             if time.time() > timeout_val:
-    #                 if received_data:
-    #                     print("")
-    #                 break
-    #             if len(self.rx_data) > max_dump_size:
-    #                 print("")
-    #                 break
-    #     self.rx_data = bytearray()
-    #     # Define a timeout period so we don't get stuck here
-    #     self.serial.timeout = timeout
-    #     # Clear the buffer and start fresh
-    #     self.serial.reset_input_buffer()
-    #     receive_loop()
-    #     return self.rx_data
 
     def raw_rx(self, timeout: float = None) -> bytearray:
         timeout_val = time.time() + timeout

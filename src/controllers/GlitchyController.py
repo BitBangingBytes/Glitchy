@@ -3,7 +3,7 @@ import json
 import time
 import webbrowser
 import sys
-import binascii
+import logging
 
 from controllers.ChipWhisperer import ChipWhisperer
 from controllers.EnvoxBB3 import EnvoxBB3
@@ -12,6 +12,7 @@ from controllers.Serial import Serial
 from core.Controller import Controller
 from models.GlitchyData import GlitchyDataModel
 
+logger = logging.getLogger(__name__)
 """
     Main controller. It will be responsible for program's main screen behavior.
 """
@@ -46,6 +47,7 @@ class GlitchyController(Controller):
     """
 
     def main(self):
+        logger.info("Starting Glitchy")
         self.startupView.main()
 
     def automated_glitch(self):
@@ -141,7 +143,7 @@ class GlitchyController(Controller):
                     datarate = int(self.startupView.v_serial_flood_datarate.get())
                     ser_data = self.serial_rx_flood(timeout=timeout, flood_rate=datarate, dump_size=capture_size)
                     if ser_data is not None:
-                        print(f"Read {ser_data} bytes before timeout occurred.")
+                        logger.info(f"Read {ser_data} bytes before timeout occurred.")
                         if ser_data > capture_size:
                             self.glitcher_pause = True
                             self.glitcher_success = True
@@ -298,7 +300,7 @@ class GlitchyController(Controller):
                 # Glitch finished
                 timer_stop = time.time()
                 total_time = timer_stop - timer_start
-                print(total_time)
+                logger.info(f"Automated Glitch time: {total_time}")
                 self.glitchy_data.enqueue("automated_glitch_log", "###########################\n"
                                                                   f"Total Time: {round(total_time, 2)} Seconds\n"
                                                                   "###########################\n\n")
@@ -341,21 +343,21 @@ class GlitchyController(Controller):
             if match_loc < 1:
                 return new_loc, new_len
             for i in byte_data:
-                # print(f"Location Counter: {location_counter}")
+                logger.info(f"Location Counter: {location_counter}")
                 if i < 32 or i > 126:
                     new_loc += 4
                     if exiting_string:
                         exiting_string = False
                         new_loc += 3
-                        # print("Exited String")
+                        logger.info("Exited String")
                 if 31 < i < 127:
                     new_loc += 1
                     exiting_string = True
                 location_counter -= 1
                 if location_counter == 0:
-                    # print("Break from Location Counting")
+                    logger.info("Break from Location Counting")
                     break
-            # print(f"New Loc: {new_loc}, New Len: {new_len}, Byte Data Len: {byte_len}")
+            logger.info(f"New Loc: {new_loc}, New Len: {new_len}, Byte Data Len: {byte_len}")
             # Deal with different edge cases
             if (31 < byte_data[match_loc-1] < 127) and (byte_data[match_loc] < 32 or byte_data[match_loc] > 126):
                 # String ending before special character
@@ -456,10 +458,14 @@ class GlitchyController(Controller):
             webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
 
     def open_file(self, load_file):
-        # Add code here to verify load file integrity
-        checked_data = load_file
-        # Add code here to call data model
-        self.glitchy_data.load_data(json.load(checked_data))
+        # Test if load_file is a valid json file
+        try:
+            json_data = json.load(load_file)
+        except ValueError as e:
+            logger.error(f"Error: {e}")
+            return None
+        # Load the data into the glitchy_data object
+        self.glitchy_data.load_data(json_data)
 
     def save_file(self, parameters, save_reference):
         json.dump(parameters, save_reference)

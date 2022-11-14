@@ -1,8 +1,10 @@
 import os
 import pathlib
 import time
-from threading import Thread
+import logging
 import tkinter as tk
+
+from threading import Thread
 from tkinter import ttk, messagebox
 from tkinter.filedialog import askopenfile, asksaveasfile
 from tkinter.messagebox import showerror
@@ -16,6 +18,7 @@ from views.Events import Events
 from views.FieldValidate import FieldValidate
 from views.View import View
 
+logger = logging.getLogger(__name__)
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "pygubu" / "Glitchy_v0.2.ui"
 
@@ -384,13 +387,13 @@ class StartupView(View, Events, FieldValidate):
                     return
 
                 if command[0] == "Highlight":
-                    # print(f"Command: {command}")
+                    logger.debug(f"Command: {command}")
                     highlight_start = command[1]
                     highlight_len = command[2]
                     highlight_end = str(int(highlight_start) + int(highlight_len))
                     current_line, current_pos = self.serial_text_box.index('end - 1 line').split(".")
-                    # print(f"Current Line: {current_line}, Current Position: {current_pos} and Tk.END: {tk.END}")
-                    # print(f"Highlight start: {highlight_start}, Highlight Length: {highlight_len}")
+                    logger.debug(f"Current Line: {current_line}, Current Position: {current_pos} and Tk.END: {tk.END}")
+                    logger.debug(f"Highlight start: {highlight_start}, Highlight Length: {highlight_len}")
                     self.serial_text_box.insert(tk.END, data)
                     self.serial_text_box.tag_add('start', str(current_line + "." + highlight_start),
                                                  str(current_line + "." + highlight_end))
@@ -510,7 +513,7 @@ class StartupView(View, Events, FieldValidate):
             update_serial_logging()
             if self.glitchyController.glitcher_success is True:
                 self.glitchyController.glitcher_success = False
-                print("Glitcher Success!!")
+                logger.info("Glitcher Success!!")
                 messagebox.showinfo(title="SUCCESS!", message="Post-Glitch Event Found!\nGlitching Paused.")
         # -----------------------------------------------------
         else:
@@ -582,7 +585,7 @@ class StartupView(View, Events, FieldValidate):
             'debug_commands': self.v_debug_commands.get()}
         for key in parameters:
             self.glitchy_data.set_parameter(key, parameters[key])
-        # print(self.glitchy_data.parameters)
+        logger.debug(self.glitchy_data.parameters)
 
     def close(self):
         return
@@ -823,14 +826,14 @@ class StartupView(View, Events, FieldValidate):
             time.sleep(float(toggle1_time)+2.0)
             self.btn_ps_toggle1['state'] = 'normal'
         elif widget_id == 'btn_powersupply_toggle2':
-            print("Toggle 2 pressed")
+            logger.info("Toggle 2 pressed")
             self.btn_ps_toggle2['state'] = 'disabled'
             toggle2_time = self.v_powersupply_toggle2.get()
             self.glitchyController.powersupply.config_toggle_time(ch2=toggle2_time)
             self.glitchyController.powersupply.set_toggle(channel="2")
             self.glitchyController.powersupply.trigger_toggle()
             time.sleep(float(toggle2_time)+2.0)
-            print("Toggle 2 complete")
+            logger.info("Toggle 2 complete")
             self.btn_ps_toggle2['state'] = 'normal'
 
     def serial_connect(self):
@@ -841,7 +844,7 @@ class StartupView(View, Events, FieldValidate):
                 stopbits=int(self.v_serialport_stopbits.get()),
                 parity='N', timeout=1):
             if __debug__:
-                print("Serial Port Connected.")
+                logger.info("Serial Port Connected.")
             # Connected, setup buttons
             self.btn_ser_disconnect['state'] = 'normal'
             self.btn_ser_connect['state'] = 'disabled'
@@ -880,7 +883,7 @@ class StartupView(View, Events, FieldValidate):
         elif event == 'btn_ser_send4':
             tx_message = self.v_serial_txmsg4.get()
         else:
-            print("Don't know how we got here...")
+            logger.info("Don't know how we got here...")
 
         if tx_message:
             self.glitchyController.serial_tx(tx_message)
@@ -918,7 +921,7 @@ class StartupView(View, Events, FieldValidate):
             # Set flag here that stops the serial receive thread
             self.glitchyController.serial_rx_stop()
         else:
-            print("Don't know how we got here...")
+            logger.info("Don't know how we got here...")
 
         if rx_message:
             # Returns -1 for no match upon timeout, 0 or greater for match location in string received

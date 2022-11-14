@@ -2,6 +2,8 @@
     Model description
 """
 import queue
+import logging
+logger = logging.getLogger(__name__)
 
 
 class GlitchyDataModel:
@@ -51,13 +53,13 @@ class GlitchyDataModel:
             for key in load_data:
                 self.parameters[key] = load_data[key]
         except KeyError:
-            print("Error loading a key")
+            logger.error("Error loading a key", exc_info=True)
 
     def get_parameter(self, parameter: str) -> str:
         try:
             return self.parameters[parameter]
         except KeyError:
-            print(f"{parameter} not found in call to {GlitchyDataModel.__name__}:get_parameter")
+            logger.error(f"{parameter} not found in call to {GlitchyDataModel.__name__}:get_parameter", exc_info=True)
             return ''
 
     def set_parameter(self, parameter: str, value: object) -> bool:

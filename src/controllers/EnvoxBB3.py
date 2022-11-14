@@ -1,6 +1,8 @@
 # -*- encoding:utf-8 -*-
 import telnetlib
 import time
+import logging
+logger = logging.getLogger(__name__)
 
 
 class EnvoxBB3:
@@ -116,7 +118,7 @@ class EnvoxBB3:
 
     def config_toggle_time(self, channel: int, voltage: float, current: float, toggle_time: float):
         """ Take the current voltage and current settings for a given channel and load into power supply toggle list"""
-        print(f"Envox BB3 config toggle time, channel = {channel}, toggle time = {toggle_time}")
+        logger.info(f"Envox BB3 config toggle time, channel = {channel}, toggle time = {toggle_time}")
 
         self.refresh = False
         while self.polling:  # Wait until refresh cycle completes
