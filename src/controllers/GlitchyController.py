@@ -50,6 +50,15 @@ class GlitchyController(Controller):
         logger.info("Starting Glitchy")
         self.startupView.main()
 
+    def chipwhisperer_list_devices(self):
+        return self.cw.list_devices()
+
+    def chipwhisperer_connect(self):
+        pass
+
+    def chipwhisperer_disconnect(self):
+        pass
+
     def automated_glitch(self):
 
         def clear_live_values():
