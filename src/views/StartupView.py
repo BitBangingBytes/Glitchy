@@ -78,6 +78,8 @@ class StartupView(View, Events, FieldValidate):
                 "v_cw_speed",
                 "v_cw_source",
                 "v_cw_mosfet",
+                "v_cw_device_list",
+                "v_cw_connected_device",
                 "v_powersupply_ipaddr",
                 "v_powersupply_port",
                 "v_powersupply_startingvoltage1",
@@ -171,6 +173,8 @@ class StartupView(View, Events, FieldValidate):
         self.v_cw_speed = None
         self.v_cw_source = None
         self.v_cw_mosfet = None
+        self.v_cw_device_list = None
+        self.v_cw_connected_device = None
         self.v_powersupply_ipaddr = None
         self.v_powersupply_port = None
         self.v_powersupply_startingvoltage1 = None
@@ -931,6 +935,12 @@ class StartupView(View, Events, FieldValidate):
             else:
                 self.v_serial_rx_test_status.set(f"RX Message {message_num} not found before timeout.")
             return
+
+    def cw_connect(self):
+        pass
+
+    def cw_disconnect(self):
+        pass
 
     def cw_configure(self):
         """ Reconfigure entire chipwhisperer each time this button is clicked
