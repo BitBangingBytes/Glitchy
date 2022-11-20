@@ -600,7 +600,7 @@
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="x">650</property>
-                          <property name="y">240</property>
+                          <property name="y">390</property>
                         </layout>
                       </object>
                     </child>
@@ -612,7 +612,7 @@
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="x">0</property>
-                          <property name="y">0</property>
+                          <property name="y">150</property>
                         </layout>
                         <child>
                           <object class="ttk.Label" id="l_cw_timeaftertrigger">
@@ -785,7 +785,7 @@ Timeout</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="x">310</property>
-                          <property name="y">0</property>
+                          <property name="y">150</property>
                         </layout>
                         <child>
                           <object class="ttk.Label" id="l_cw_clock">
@@ -856,17 +856,6 @@ Timeout</property>
                           </object>
                         </child>
                         <child>
-                          <object class="ttk.Button" id="c_cw_configure">
-                            <property name="command" type="command" cbtype="simple">cw_configure</property>
-                            <property name="text" translatable="yes">Configure</property>
-                            <layout manager="place">
-                              <property name="anchor">nw</property>
-                              <property name="x">25</property>
-                              <property name="y">150</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
                           <object class="ttk.Button" id="b_cw_io">
                             <property name="command" type="command" cbtype="simple">cw_io</property>
                             <property name="state">disabled</property>
@@ -901,6 +890,55 @@ Timeout</property>
                             </layout>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Labelframe" id="labelframe4">
+                        <property name="text" translatable="yes">Fault Injection Hardware</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">140</property>
+                          <property name="width">728</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Button" id="button1">
+                            <property name="command" type="command" cbtype="simple">cw_connect</property>
+                            <property name="style">GreenButton.TButton</property>
+                            <property name="text" translatable="yes">Connect</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">75</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="button2">
+                            <property name="command" type="command" cbtype="simple">cw_disconnect</property>
+                            <property name="state">disabled</property>
+                            <property name="style">RedButton.TButton</property>
+                            <property name="text" translatable="yes">Disconnect</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">75</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Button" id="c_cw_configure">
+                            <property name="command" type="command" cbtype="simple">cw_configure</property>
+                            <property name="state">disabled</property>
+                            <property name="text" translatable="yes">Configure</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">400</property>
+                              <property name="y">75</property>
+                            </layout>
+                          </object>
+                        </child>
                         <child>
                           <object class="ttk.Button" id="b_cw_printsettings" named="True">
                             <property name="command" type="command" cbtype="simple">cw_print_settings</property>
@@ -908,8 +946,40 @@ Timeout</property>
                             <property name="text" translatable="yes">Print Settings</property>
                             <layout manager="place">
                               <property name="anchor">nw</property>
-                              <property name="x">125</property>
-                              <property name="y">150</property>
+                              <property name="x">500</property>
+                              <property name="y">75</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Combobox" id="combobox1">
+                            <property name="state">readonly</property>
+                            <property name="textvariable">string:v_cw_device_list</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="width">300</property>
+                              <property name="x">25</property>
+                              <property name="y">35</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label24">
+                            <property name="text" translatable="yes">Connected to:</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">25</property>
+                              <property name="y">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Label" id="label25">
+                            <property name="textvariable">string:v_cw_connected_device</property>
+                            <layout manager="place">
+                              <property name="anchor">nw</property>
+                              <property name="x">120</property>
+                              <property name="y">5</property>
                             </layout>
                           </object>
                         </child>
