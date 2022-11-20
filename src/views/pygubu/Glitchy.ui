@@ -903,7 +903,7 @@ Timeout</property>
                           <property name="y">0</property>
                         </layout>
                         <child>
-                          <object class="ttk.Button" id="button1">
+                          <object class="ttk.Button" id="btn_cw_connect" named="True">
                             <property name="command" type="command" cbtype="simple">cw_connect</property>
                             <property name="style">GreenButton.TButton</property>
                             <property name="text" translatable="yes">Connect</property>
@@ -915,7 +915,7 @@ Timeout</property>
                           </object>
                         </child>
                         <child>
-                          <object class="ttk.Button" id="button2">
+                          <object class="ttk.Button" id="btn_cw_disconnect" named="True">
                             <property name="command" type="command" cbtype="simple">cw_disconnect</property>
                             <property name="state">disabled</property>
                             <property name="style">RedButton.TButton</property>
@@ -928,7 +928,7 @@ Timeout</property>
                           </object>
                         </child>
                         <child>
-                          <object class="ttk.Button" id="c_cw_configure">
+                          <object class="ttk.Button" id="btn_cw_configure" named="True">
                             <property name="command" type="command" cbtype="simple">cw_configure</property>
                             <property name="state">disabled</property>
                             <property name="text" translatable="yes">Configure</property>
@@ -952,9 +952,10 @@ Timeout</property>
                           </object>
                         </child>
                         <child>
-                          <object class="ttk.Combobox" id="combobox1">
+                          <object class="ttk.Combobox" id="c_cw_device_list" named="True">
                             <property name="state">readonly</property>
                             <property name="textvariable">string:v_cw_device_list</property>
+                            <bind sequence="&lt;Enter&gt;" handler="chipwhisperer_populate_list" add="" />
                             <layout manager="place">
                               <property name="anchor">nw</property>
                               <property name="width">300</property>

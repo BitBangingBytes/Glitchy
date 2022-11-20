@@ -31,6 +31,8 @@ class StartupView(View, Events, FieldValidate):
         self.glitcher = None
         self.queue = None
         self.powersupply = None
+        self.chipwhisperer_list = None
+        self.chipwhisperer_serial = None
         self.parameters = None
         self.com_port = None
         self.splash = None
@@ -234,6 +236,9 @@ class StartupView(View, Events, FieldValidate):
         self.glitch_button = self.builder.get_object('b_cw_glitch')
         self.io_button = self.builder.get_object('b_cw_io')
         self.print_settings_button = self.builder.get_object('b_cw_printsettings')
+        self.cw_connect_button = self.builder.get_object('btn_cw_connect')
+        self.cw_disconnect_button = self.builder.get_object('btn_cw_disconnect')
+        self.cw_configure_button = self.builder.get_object('btn_cw_configure')
 
         self.pre_event_1 = self.builder.get_object('pre_event_1')
         self.pre_event_2 = self.builder.get_object('pre_event_2')
@@ -253,6 +258,9 @@ class StartupView(View, Events, FieldValidate):
         self.post_delay_1 = self.builder.get_object('post_delay_1')
         self.post_delay_2 = self.builder.get_object('post_delay_2')
         self.post_delay_3 = self.builder.get_object('post_delay_3')
+
+        self.cw_device_list = self.builder.get_object('c_cw_device_list')
+        self.cw_device_list.set('Select a ChipWhisperer')
 
     def _setup_textboxes(self):
         self.serial_text_box = self.builder.get_object('t_serialport_text_box')
@@ -377,6 +385,32 @@ class StartupView(View, Events, FieldValidate):
         self.mainwindow.mainloop()
 
     def update_values(self):
+        def update_chipwhisperer_list():
+            # devices = []
+            # try:
+            #     self.chipwhisperer_list = self.glitchyController.chipwhisperer_list_devices()
+            # except OSError:
+            #     pass
+            #
+            # match len(self.chipwhisperer_list):
+            #     case 0:
+            #         self.cw_device_list.set('Select a ChipWhisperer')
+            #         self.cw_device_list.config(values=['No ChipWhisperer Connected'])
+            #     case 1:
+            #         self.cw_device_list.config(values=[devices[0]["name"]])
+            #     case 2:
+            #         self.cw_device_list.config(values=[devices[0]["name"], devices[1]["name"]])
+            #     case 3:
+            #         self.cw_device_list.config(values=[devices[0]["name"], devices[1]["name"],
+            #                                            'You have a lot of ChipWhisperers...'])
+            #     case _:
+            #         self.cw_device_list.set('Something went very wrong...')
+            #         self.cw_device_list.config(values=[])
+            # print(self.cw_device_list.current())
+            pass
+
+
+
         def update_serial_logging():
             while self.glitchyController.glitchy_data.is_empty("serial") is False:
                 data, command = self.glitchyController.glitchy_data.dequeue("serial")
@@ -518,6 +552,7 @@ class StartupView(View, Events, FieldValidate):
                 messagebox.showinfo(title="SUCCESS!", message="Post-Glitch Event Found!\nGlitching Paused.")
         # -----------------------------------------------------
         else:
+            update_chipwhisperer_list()
             update_serial_logging()
             update_automated_glitch()
             update_chipwhisperer_calculated_fields()
@@ -590,6 +625,37 @@ class StartupView(View, Events, FieldValidate):
 
     def close(self):
         return
+
+    def chipwhisperer_populate_list(self, event=None):
+        # print("Entered chipwhisperer_populate_list")
+        devices = []
+        try:
+            self.chipwhisperer_list = self.glitchyController.chipwhisperer_list_devices()
+        except OSError:
+            pass
+
+        match len(self.chipwhisperer_list):
+            case 0:
+                self.cw_device_list.set('Select a ChipWhisperer')
+                self.cw_device_list.config(values=['No ChipWhisperer Connected'])
+            case 1:
+                self.cw_device_list.config(values=[self.chipwhisperer_list[0]["name"] + " ..." +
+                                                   self.chipwhisperer_list[0]["sn"][-6:]])
+            case 2:
+                self.cw_device_list.config(values=[self.chipwhisperer_list[0]["name"] + " ..." +
+                                                   self.chipwhisperer_list[0]["sn"][-6:],
+                                                   self.chipwhisperer_list[1]["name"] + " ..." +
+                                                   self.chipwhisperer_list[1]["sn"][-6:]])
+            case 3:
+                self.cw_device_list.config(values=[self.chipwhisperer_list[0]["name"] + " ..." +
+                                                   self.chipwhisperer_list[0]["sn"][-6:],
+                                                   self.chipwhisperer_list[1]["name"] + " ..." +
+                                                   self.chipwhisperer_list[1]["sn"][-6:],
+                                                   'You have a lot of ChipWhisperers...'])
+            case _:
+                self.cw_device_list.set('Something went very wrong...')
+                self.cw_device_list.config(values=[])
+        self.cw_device_list.selection_clear()
 
     def videohelp_automatedglitch(self, event=None):
         messagebox.showinfo(title="Coming Soon",
@@ -934,9 +1000,45 @@ class StartupView(View, Events, FieldValidate):
             return
 
     def cw_connect(self):
-        pass
+        # Connect to ChipWhisperer
+
+        match self.cw_device_list.current():
+            case 0:
+                self.chipwhisperer_serial = self.chipwhisperer_list[self.cw_device_list.current()]["sn"]
+            case 1:
+                self.chipwhisperer_serial = self.chipwhisperer_list[self.cw_device_list.current()]["sn"]
+            case _:
+                self.chipwhisperer_serial = None
+        if self.chipwhisperer_serial:
+            try:
+                self.glitchyController.cw.connect(sn=self.chipwhisperer_serial)
+            except Exception as e:
+                if e.__class__.__name__ == 'OSError':
+                    messagebox.showerror(title="Error", message="ChipWhisperer not detected.")
+                if e.__class__.__name__ == 'USBErrorBusy':
+                    messagebox.showerror(title="Error", message="ChipWhisperer already connected to another program. :(")
+                return
+            self.v_cw_connected_device.set(self.chipwhisperer_list[self.cw_device_list.current()]["name"] + " ..." +
+                                           self.chipwhisperer_list[self.cw_device_list.current()]["sn"][-6:])
+            self.run_button['state'] = 'normal'
+            self.glitch_button['state'] = 'normal'
+            self.io_button['state'] = 'normal'
+            self.print_settings_button['state'] = 'normal'
+            self.cw_connect_button['state'] = 'disabled'
+            self.cw_disconnect_button['state'] = 'normal'
+            self.cw_configure_button['state'] = 'normal'
+            # print(self.glitchyController.chipwhisperer_list_devices())
 
     def cw_disconnect(self):
+        self.glitchyController.cw.disconnect()
+        self.v_cw_connected_device.set("")
+        self.run_button['state'] = 'disabled'
+        self.glitch_button['state'] = 'disabled'
+        self.io_button['state'] = 'disabled'
+        self.print_settings_button['state'] = 'disabled'
+        self.cw_connect_button['state'] = 'normal'
+        self.cw_disconnect_button['state'] = 'disabled'
+        self.cw_configure_button['state'] = 'disabled'
         pass
 
     def cw_configure(self):
@@ -949,19 +1051,19 @@ class StartupView(View, Events, FieldValidate):
         source = self.v_cw_source.get()
         speed = float(self.v_cw_speed.get()) * 1e6
         mosfet = self.v_cw_mosfet.get()
-        # Configure chipwhisperer
-        try:
-            self.glitchyController.cw.configure(speed, source, mosfet)
-        except Exception as e:
-            if e.__class__.__name__ == 'OSError':
-                messagebox.showerror(title="Error", message="ChipWhisperer not detected.")
-            if e.__class__.__name__ == 'USBErrorBusy':
-                messagebox.showerror(title="Error", message="ChipWhisperer already connected to another program. :(")
-            return
-        self.run_button['state'] = 'normal'
-        self.glitch_button['state'] = 'normal'
-        self.io_button['state'] = 'normal'
-        self.print_settings_button['state'] = 'normal'
+        # # Configure chipwhisperer
+        # try:
+        #     self.glitchyController.cw.configure(speed, source, mosfet)
+        # except Exception as e:
+        #     if e.__class__.__name__ == 'OSError':
+        #         messagebox.showerror(title="Error", message="ChipWhisperer not detected.")
+        #     if e.__class__.__name__ == 'USBErrorBusy':
+        #         messagebox.showerror(title="Error", message="ChipWhisperer already connected to another program. :(")
+        #     return
+        # self.run_button['state'] = 'normal'
+        # self.glitch_button['state'] = 'normal'
+        # self.io_button['state'] = 'normal'
+        # self.print_settings_button['state'] = 'normal'
 
     def cw_io(self):
         self.glitchyController.cw.trigger(trigger_type="High, Low, HiZ")
