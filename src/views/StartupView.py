@@ -20,7 +20,7 @@ from views.View import View
 
 logger = logging.getLogger(__name__)
 PROJECT_PATH = pathlib.Path(__file__).parent
-PROJECT_UI = PROJECT_PATH / "pygubu" / "Glitchy_v0.2.ui"
+PROJECT_UI = PROJECT_PATH / "pygubu" / "Glitchy.ui"
 
 
 class StartupView(View, Events, FieldValidate):
