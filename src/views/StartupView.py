@@ -944,16 +944,17 @@ class StartupView(View, Events, FieldValidate):
 
     def serial_transmit(self, event=None):
         tx_message = None
-        if event == 'btn_ser_send1':
-            tx_message = self.v_serial_txmsg1.get()
-        elif event == 'btn_ser_send2':
-            tx_message = self.v_serial_txmsg2.get()
-        elif event == 'btn_ser_send3':
-            tx_message = self.v_serial_txmsg3.get()
-        elif event == 'btn_ser_send4':
-            tx_message = self.v_serial_txmsg4.get()
-        else:
-            logger.info("Don't know how we got here...")
+        match event:
+            case 'btn_ser_send1':
+                tx_message = self.v_serial_txmsg1.get()
+            case 'btn_ser_send2':
+                tx_message = self.v_serial_txmsg2.get()
+            case 'btn_ser_send3':
+                tx_message = self.v_serial_txmsg3.get()
+            case 'btn_ser_send4':
+                tx_message = self.v_serial_txmsg4.get()
+            case _:
+                logger.info("Don't know how we got here...")
 
         if tx_message:
             self.glitchyController.serial_tx(tx_message)
@@ -975,23 +976,24 @@ class StartupView(View, Events, FieldValidate):
             rx_timeout = None  # Wait FOREVER!
         self.v_serial_rx_test_status.set("")
 
-        if widget_id == 'btn_ser_receive1':
-            rx_message = self.v_serial_rxmsg1.get()
-            message_num = 1
-        elif widget_id == 'btn_ser_receive2':
-            rx_message = self.v_serial_rxmsg2.get()
-            message_num = 2
-        elif widget_id == 'btn_ser_receive3':
-            rx_message = self.v_serial_rxmsg3.get()
-            message_num = 3
-        elif widget_id == 'btn_ser_receive4':
-            rx_message = self.v_serial_rxmsg4.get()
-            message_num = 4
-        elif widget_id == 'btn_ser_receive_stop':
-            # Set flag here that stops the serial receive thread
-            self.glitchyController.serial_rx_stop()
-        else:
-            logger.info("Don't know how we got here...")
+        match widget_id:
+            case 'btn_ser_receive1':
+                rx_message = self.v_serial_rxmsg1.get()
+                message_num = 1
+            case 'btn_ser_receive2':
+                rx_message = self.v_serial_rxmsg2.get()
+                message_num = 2
+            case 'btn_ser_receive3':
+                rx_message = self.v_serial_rxmsg3.get()
+                message_num = 3
+            case 'btn_ser_receive4':
+                rx_message = self.v_serial_rxmsg4.get()
+                message_num = 4
+            case 'btn_ser_receive_stop':
+                # Set flag here that stops the serial receive thread
+                self.glitchyController.serial_rx_stop()
+            case _:
+                logger.info("Don't know how we got here...")
 
         if rx_message:
             # Returns -1 for no match upon timeout, 0 or greater for match location in string received
