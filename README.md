@@ -1,8 +1,9 @@
 # Glitchy
 <p align="center"> <img src=src/views/media/Glitchy.png /> </p>
-
 ---
-
+<p align="center"> --- DEV BRANCH --- </p>
+---
+---
 Glitching microcontrollers to reveal hidden secrets can seem like a dark art performed by 
 hardware magicians. Staring at code and counting clock cycles doesn't make it any more 
 approachable to new users.
@@ -28,6 +29,7 @@ git clone https://github.com/BitBangingBytes/Glitchy.git
 cd Glitchy
 pip3 install -r requirements.txt
 ```
+## After this you must go to [ChipWhisperer's GitHub](https://github.com/newaetech/chipwhisperer) and install the 'develop' branch of chipwhisperer to get the 'list_devices' feature.
 
 To Run:
 ```
