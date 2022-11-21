@@ -10,15 +10,33 @@ class ChipWhisperer:
         self.SS_VER = 'SS_VER_1_1'
         self.scope = None
 
-    def configure(self, speed, source, mosfet):
+    @staticmethod
+    def list_devices():
+        return cw.list_devices()
+
+    def connect(self, sn=None):
+        """ Pass in a serial number if multiple ChipWhisperers are connected """
         if self.connected:
             # Start fresh each time this routine is called
             self.scope.dis()
         try:
-            self.scope = cw.scope()
+            self.scope = cw.scope(sn=sn)
         except Exception:
             raise
 
+    def disconnect(self):
+        self.scope.dis()
+
+    def configure(self, speed, source, mosfet):
+        # if self.connected:
+        #     # Start fresh each time this routine is called
+        #     self.scope.dis()
+        # try:
+        #     self.scope = cw.scope()
+        # except Exception:
+        #     raise
+
+        print("INFO: Found ChipWhisperer😍")
         logger.info("Found ChipWhisperer")
         time.sleep(0.05)
         self.scope.default_setup()
