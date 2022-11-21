@@ -122,7 +122,7 @@ class Serial:
         # Old method using read_until which returns immediately on data match, freezes app while running
         # rx_data = self.serial.read_until(expected=bytes(rx_match), size=size)
 
-        # New method which also freezes the app but receives data the whole time specified regardless of a match
+        # New method which also freezes the app but receives data the whole time specified regardless of a match.
         receive_loop()
         return self.rx_data
 
