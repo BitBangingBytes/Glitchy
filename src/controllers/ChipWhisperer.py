@@ -22,14 +22,14 @@ class ChipWhisperer:
         logger.info("Found ChipWhisperer")
         time.sleep(0.05)
         self.scope.default_setup()
-
-        if mosfet == "High Power":
-            self.scope.io.glitch_hp = True
-        elif mosfet == "Low Power":
-            self.scope.io.glitch_lp = True
-        elif mosfet == "Both":
-            self.scope.io.glitch_hp = True
-            self.scope.io.glitch_lp = True
+        match mosfet:
+            case "High Power":
+                self.scope.io.glitch_hp = True
+            case "Low Power":
+                self.scope.io.glitch_lp = True
+            case "Both":
+                self.scope.io.glitch_hp = True
+                self.scope.io.glitch_lp = True
 
         if source == "Internal":
             self.scope.clock.clkgen_freq = speed
@@ -48,34 +48,35 @@ class ChipWhisperer:
 
     def trigger(self, trigger_type):
         """ Uses ChipWhisperer I/O 3 to send a trigger signal """
-        if trigger_type == "High, Low, HiZ":
-            self.scope.io.tio3 = "gpio_high"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_low"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "high_z"
-        elif trigger_type == "Low, High, HiZ":
-            self.scope.io.tio3 = "gpio_low"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_high"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "high_z"
-        elif trigger_type == "High, Momentary Low":
-            if self.scope.io.tio3 != "gpio_high":
+        match trigger_type:
+            case "High, Low, HiZ":
                 self.scope.io.tio3 = "gpio_high"
                 time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_low"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_high"
-        elif trigger_type == "Low, Momentary High":
-            if self.scope.io.tio3 != "gpio_low":
                 self.scope.io.tio3 = "gpio_low"
                 time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_high"
-            time.sleep(0.01)
-            self.scope.io.tio3 = "gpio_low"
-        else:
-            self.scope.io.tio3 = "high_z"  # Set output high impedance
+                self.scope.io.tio3 = "high_z"
+            case "Low, High, HiZ":
+                self.scope.io.tio3 = "gpio_low"
+                time.sleep(0.01)
+                self.scope.io.tio3 = "gpio_high"
+                time.sleep(0.01)
+                self.scope.io.tio3 = "high_z"
+            case "High, Momentary Low":
+                if self.scope.io.tio3 != "gpio_high":
+                    self.scope.io.tio3 = "gpio_high"
+                    time.sleep(0.01)
+                self.scope.io.tio3 = "gpio_low"
+                time.sleep(0.01)
+                self.scope.io.tio3 = "gpio_high"
+            case "Low, Momentary High":
+                if self.scope.io.tio3 != "gpio_low":
+                    self.scope.io.tio3 = "gpio_low"
+                    time.sleep(0.01)
+                self.scope.io.tio3 = "gpio_high"
+                time.sleep(0.01)
+                self.scope.io.tio3 = "gpio_low"
+            case _:
+                self.scope.io.tio3 = "high_z"  # Set output high impedance
 
     def print_settings(self):
         logger.info(self.scope)

@@ -72,83 +72,85 @@ class GlitchyController(Controller):
 
         def trigger_power(option):
             trigger_fudge_factor = 0.25
-            if option == "Toggle CH1":
-                if self.power_toggle_config:
-                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
-                    self.powersupply.set_toggle(channel="1")
-                    self.power_toggle_config = False
-                self.powersupply.trigger_toggle()
-                time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch1_toggle")) + trigger_fudge_factor)
-            elif option == "Toggle CH2":
-                if self.power_toggle_config:
-                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
-                    self.powersupply.set_toggle(channel="2")
-                    self.power_toggle_config = False
-                self.powersupply.trigger_toggle()
-                time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch2_toggle")) + trigger_fudge_factor)
-            elif option == "Toggle CH1 & CH2":
-                if self.power_toggle_config:
-                    self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"),
-                                                        ch2=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
-                    self.powersupply.set_toggle(channel="ALL")
-                    self.power_toggle_config = False
-                self.powersupply.trigger_toggle()
-                ch1_time = float(self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
-                ch2_time = float(self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
-                if ch1_time > ch2_time:
-                    time.sleep(ch1_time + trigger_fudge_factor)
-                else:
-                    time.sleep(ch2_time)
-            else:
-                pass
+            match option:
+                case "Toggle CH1":
+                    if self.power_toggle_config:
+                        self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
+                        self.powersupply.set_toggle(channel="1")
+                        self.power_toggle_config = False
+                    self.powersupply.trigger_toggle()
+                    time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch1_toggle")) + trigger_fudge_factor)
+                case "Toggle CH2":
+                    if self.power_toggle_config:
+                        self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                        self.powersupply.set_toggle(channel="2")
+                        self.power_toggle_config = False
+                    self.powersupply.trigger_toggle()
+                    time.sleep(float(self.glitchy_data.get_parameter("powersupply_ch2_toggle")) + trigger_fudge_factor)
+                case "Toggle CH1 & CH2":
+                    if self.power_toggle_config:
+                        self.powersupply.config_toggle_time(ch1=self.glitchy_data.get_parameter("powersupply_ch1_toggle"),
+                                                            ch2=self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                        self.powersupply.set_toggle(channel="ALL")
+                        self.power_toggle_config = False
+                    self.powersupply.trigger_toggle()
+                    ch1_time = float(self.glitchy_data.get_parameter("powersupply_ch1_toggle"))
+                    ch2_time = float(self.glitchy_data.get_parameter("powersupply_ch2_toggle"))
+                    if ch1_time > ch2_time:
+                        time.sleep(ch1_time + trigger_fudge_factor)
+                    else:
+                        time.sleep(ch2_time)
+                case _:
+                    pass
 
         def trigger_io(option):
             self.cw.trigger(trigger_type=option)
 
         def trigger_serial(option):
             if self.serial.connected:
-                if option == "Send Message 1":
-                    self.startupView.serial_transmit(event="btn_ser_send1")
-                elif option == "Send Message 2":
-                    self.startupView.serial_transmit(event="btn_ser_send2")
-                elif option == "Send Message 3":
-                    self.startupView.serial_transmit(event="btn_ser_send3")
-                elif option == "Send Message 4":
-                    self.startupView.serial_transmit(event="btn_ser_send4")
-                elif option == "Match Message 1":
-                    # Add functionality here
-                    if self.startupView.serial_receive_test(widget_id="btn_ser_receive1") > -1:
-                        self.glitcher_pause = True
-                        self.glitcher_success = True
-                elif option == "Match Message 2":
-                    # Add functionality here
-                    if self.startupView.serial_receive_test(widget_id="btn_ser_receive2") > -1:
-                        self.glitcher_pause = True
-                        self.glitcher_success = True
-                elif option == "Match Message 3":
-                    # Add functionality here
-                    if self.startupView.serial_receive_test(widget_id="btn_ser_receive3") > -1:
-                        self.glitcher_pause = True
-                        self.glitcher_success = True
-                elif option == "Match Message 4":
-                    # Add functionality here
-                    if self.startupView.serial_receive_test(widget_id="btn_ser_receive4") > -1:
-                        self.glitcher_pause = True
-                        self.glitcher_success = True
-                elif option == "Serial Flood":
-                    # self.serial.timeout = 2
-                    # ser_data = self.serial.serial_flood(timeout=2)
-                    timeout = float(self.startupView.v_serial_flood_timeout.get())
-                    capture_size = int(self.startupView.v_serial_flood_capturesize.get())
-                    datarate = int(self.startupView.v_serial_flood_datarate.get())
-                    ser_data = self.serial_rx_flood(timeout=timeout, flood_rate=datarate, dump_size=capture_size)
-                    if ser_data is not None:
-                        logger.info(f"Read {ser_data} bytes before timeout occurred.")
-                        if ser_data > capture_size:
+                match option:
+                    case "Send Message 1":
+                        self.startupView.serial_transmit(event="btn_ser_send1")
+                    case "Send Message 2":
+                        self.startupView.serial_transmit(event="btn_ser_send2")
+                    case "Send Message 3":
+                        self.startupView.serial_transmit(event="btn_ser_send3")
+                    case "Send Message 4":
+                        self.startupView.serial_transmit(event="btn_ser_send4")
+                    case "Match Message 1":
+                        # Add functionality here
+                        if self.startupView.serial_receive_test(widget_id="btn_ser_receive1") > -1:
                             self.glitcher_pause = True
                             self.glitcher_success = True
-                else:
-                    pass
+                    case "Match Message 2":
+                        # Add functionality here
+                        if self.startupView.serial_receive_test(widget_id="btn_ser_receive2") > -1:
+                            self.glitcher_pause = True
+                            self.glitcher_success = True
+                    case "Match Message 3":
+                        # Add functionality here
+                        if self.startupView.serial_receive_test(widget_id="btn_ser_receive3") > -1:
+                            self.glitcher_pause = True
+                            self.glitcher_success = True
+                    case "Match Message 4":
+                        # Add functionality here
+                        if self.startupView.serial_receive_test(widget_id="btn_ser_receive4") > -1:
+                            self.glitcher_pause = True
+                            self.glitcher_success = True
+                    case "Serial Flood":
+                        # self.serial.timeout = 2
+                        # ser_data = self.serial.serial_flood(timeout=2)
+                        timeout = float(self.startupView.v_serial_flood_timeout.get())
+                        capture_size = int(self.startupView.v_serial_flood_capturesize.get())
+                        datarate = int(self.startupView.v_serial_flood_datarate.get())
+                        ser_data = self.serial_rx_flood(timeout=timeout, flood_rate=datarate, dump_size=capture_size)
+                        if ser_data is not None:
+                            logger.info(f"Read {ser_data} bytes before timeout occurred.")
+                            if ser_data > capture_size:
+                                self.glitcher_pause = True
+                                self.glitcher_success = True
+                    case _:
+                        pass
             else:
                 pass
 
@@ -193,14 +195,15 @@ class GlitchyController(Controller):
                     if event := pre_event[x]:
                         self.glitchy_data.enqueue("automated_glitch_log",
                                                   f"Pre: {event}: {pre_option[x]} \n")
-                        if event == "Power":
-                            trigger_power(pre_option[x])
-                        elif event == "I/O":
-                            trigger_io(pre_option[x])
-                        elif event == "Serial":
-                            trigger_serial(pre_option[x])
-                        else:
-                            pass
+                        match event:
+                            case "Power":
+                                trigger_power(pre_option[x])
+                            case "I/O":
+                                trigger_io(pre_option[x])
+                            case "Serial":
+                                trigger_serial(pre_option[x])
+                            case _:
+                                pass
                         if delay := pre_delay[x]:
                             self.glitchy_data.enqueue("automated_glitch_log",
                                                       f"Pre: Delay: {pre_delay[x]} seconds\n")
@@ -210,14 +213,15 @@ class GlitchyController(Controller):
                     if event := post_event[x]:
                         self.glitchy_data.enqueue("automated_glitch_log",
                                                   f"Post: {event}: {post_option[x]} \n")
-                        if event == "OpenOCD":
-                            trigger_openocd(post_option[x])
-                        elif event == "I/O":
-                            trigger_io(post_option[x])
-                        elif event == "Serial":
-                            trigger_serial(post_option[x])
-                        else:
-                            pass
+                        match event:
+                            case "OpenOCD":
+                                trigger_openocd(post_option[x])
+                            case "I/O":
+                                trigger_io(post_option[x])
+                            case "Serial":
+                                trigger_serial(post_option[x])
+                            case _:
+                                pass
                         if delay := post_delay[x]:
                             self.glitchy_data.enqueue("automated_glitch_log",
                                                       f"Post: Delay: {post_delay[x]} seconds\n")
@@ -444,18 +448,19 @@ class GlitchyController(Controller):
 
     @staticmethod
     def videohelp(topic=None):
-        if topic == "Automated Glitch":
-            webbrowser.open_new_tab("https://www.youtube.com/watch?v=TrEsTD9i0LU")
-        elif topic == "Chipwhisperer":
-            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=329")
-        elif topic == "Power Supply":
-            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=453")
-        elif topic == "Serial":
-            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=1200")
-        elif topic == "OpenOCD":
-            webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=630")
-        else:
-            webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
+        match topic:
+            case "Automated Glitch":
+                webbrowser.open_new_tab("https://www.youtube.com/watch?v=TrEsTD9i0LU")
+            case "Chipwhisperer":
+                webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=329")
+            case "Power Supply":
+                webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=453")
+            case "Serial":
+                webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=1200")
+            case "OpenOCD":
+                webbrowser.open_new_tab("https://youtu.be/TrEsTD9i0LU?t=630")
+            case _:
+                webbrowser.open_new_tab("http://www.youtube.com/c/RECESSIM")
 
     def open_file(self, load_file):
         # Test if load_file is a valid json file
