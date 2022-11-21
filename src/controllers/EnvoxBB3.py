@@ -147,25 +147,26 @@ class EnvoxBB3:
         self.refresh = False
         while self.polling:  # Wait until refresh cycle completes
             pass
-        if channel == "1":
-            # Enable toggle on channel 1
-            self.tn.write(b'INST CH1\n')
-            self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
-            # Disable toggle on channel 2
-            self.tn.write(b'INST CH2\n')
-            self.tn.write(b'VOLT:MODE FIX\nCURR:MODE FIX\n')
-        elif channel == "2":
-            # Enable toggle on channel 2
-            self.tn.write(b'INST CH2\n')
-            self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
-            # Disable toggle on channel 1
-            self.tn.write(b'INST CH1\n')
-            self.tn.write(b'VOLT:MODE FIX\nCURR:MODE FIX\n')
-        elif channel == "ALL":
-            # Enable toggle on channel 1
-            self.tn.write(b'INST CH1\n')
-            self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
-            # Enable toggle on channel 2
-            self.tn.write(b'INST CH2\n')
-            self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
+        match channel:
+            case "1":
+                # Enable toggle on channel 1
+                self.tn.write(b'INST CH1\n')
+                self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
+                # Disable toggle on channel 2
+                self.tn.write(b'INST CH2\n')
+                self.tn.write(b'VOLT:MODE FIX\nCURR:MODE FIX\n')
+            case "2":
+                # Enable toggle on channel 2
+                self.tn.write(b'INST CH2\n')
+                self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
+                # Disable toggle on channel 1
+                self.tn.write(b'INST CH1\n')
+                self.tn.write(b'VOLT:MODE FIX\nCURR:MODE FIX\n')
+            case "ALL":
+                # Enable toggle on channel 1
+                self.tn.write(b'INST CH1\n')
+                self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
+                # Enable toggle on channel 2
+                self.tn.write(b'INST CH2\n')
+                self.tn.write(b'VOLT:MODE LIST\nCURR:MODE LIST\n')
         self.refresh = True
